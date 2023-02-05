@@ -6,6 +6,8 @@
   },
   "dependencies": {
     "@connext/smart-contracts": "^0.2.1-rc.27",
-    "@openzeppelin/contracts": "^4.8.1"
+    "@openzeppelin/contracts": "^4.8.1",
+    "@openzeppelin/contracts-upgradeable": "^4.8.1",
+    "dotenv": "^16.0.3"
   }
 }
