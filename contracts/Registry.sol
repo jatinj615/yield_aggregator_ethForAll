@@ -43,7 +43,6 @@ contract Registry is IXReceiver, Ownable {
 
     RouteData[] public routes;
 
-    // Todo: getter and setter functions
     mapping(uint32 => address) public registryForDomains;
 
     event RouteAdded(uint256 routeId, address route, bool isEnabled);
@@ -181,6 +180,21 @@ contract Registry is IXReceiver, Ownable {
         if (_receiverAddress == address(0) ||
             _vaultAddress == address(0) ||
             _underlying == address(0)) revert Errors.ZeroAddress();
+    }
+
+    // Registry Management Functions
+
+    /**
+     @notice map registry address with domain Id of destination chain
+     @param _registry: address of destination chain registry
+     @param _domainId: Domain ID of destination chain
+     */
+    function addRegistryForDomain(
+        address _registry, 
+        uint32 _domainId
+    ) external onlyOwner {
+        if (_registry == address(0)) revert Errors.ZeroAddress();
+        registryForDomains[_domainId] = _registry;
     }
 
     // Route Management Functions
