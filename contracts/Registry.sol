@@ -43,9 +43,20 @@ contract Registry is IXReceiver, Ownable {
 
     RouteData[] public routes;
 
+    // Todo: getter and setter functions
+    mapping(uint32 => address) public registryForDomains;
+
     event RouteAdded(uint256 routeId, address route, bool isEnabled);
 
     event RouteDisabled(uint256 routeId);
+
+
+    // Todo: add source chain authentication by mapping sourceDomain->sourceRegsitry
+    modifier onlySource(address _originSender, uint32 _origin) {
+        if (registryForDomains[_origin] != _originSender ||
+            msg.sender != address(connext)) revert Errors.Unauthorized();
+        _;
+    }
 
     modifier onlyExistingRoutes(uint256 _routeId) {
         if(routes[_routeId].route == address(0)) revert Errors.RouteNotFound(_routeId);
@@ -115,6 +126,7 @@ contract Registry is IXReceiver, Ownable {
         
     }
 
+    
     function xReceive(
         bytes32 _transferId,
         uint256 _amount,
@@ -122,11 +134,19 @@ contract Registry is IXReceiver, Ownable {
         address _originSender,
         uint32 _origin,
         bytes memory _callData
-    ) external returns (bytes memory) {
+    ) external onlySource(_originSender, _origin) returns (bytes memory) {
+        (
+            uint256 _routeId,
+            uint256 _depositAmount,
+            address _receiverAddress,
+            address _underlying,
+            address _vaultAddress
+        ) = abi.decode(_callData, (uint256, uint256, address, address, address));
 
+        // TODO: check for input params if required
+        // TODO: check for revert with try catch
+        _userDeposit(_routeId, _amount, _receiverAddress, _asset, _vaultAddress);
     }
-
-
 
     /**
      @notice Check User Request params, reverts if invalid
