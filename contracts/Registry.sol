@@ -86,9 +86,7 @@ contract Registry is IXReceiver, Ownable {
 
             bytes memory _payload = abi.encode(
                 _depositRequest.routeId,
-                _depositRequest.amount,
                 _depositRequest.receiverAddress,
-                _depositRequest.underlying,
                 _depositRequest.vaultAddress
             );
 
@@ -137,11 +135,9 @@ contract Registry is IXReceiver, Ownable {
     ) external onlySource(_originSender, _origin) returns (bytes memory) {
         (
             uint256 _routeId,
-            uint256 _depositAmount,
             address _receiverAddress,
-            address _underlying,
             address _vaultAddress
-        ) = abi.decode(_callData, (uint256, uint256, address, address, address));
+        ) = abi.decode(_callData, (uint256, address, address));
 
         // TODO: check for input params if required
         // TODO: check for revert with try catch
