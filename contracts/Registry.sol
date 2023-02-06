@@ -19,12 +19,21 @@ contract Registry is IXReceiver, Ownable {
         bool isEnabled;
     }
 
+    struct BridgeRequest {
+        uint32 destinationDomain;
+        uint256 relayerFee;
+        uint256 slippage;
+        address target;
+        address asset;
+    }
+
     struct VaultRequest {
         uint256 routeId;
         uint256 amount;
         address vaultAddress;
         address underlying;
         address receiverAddress;
+        BridgeRequest bridgeRequest;
     }
 
     struct UserRequest {
@@ -61,19 +70,48 @@ contract Registry is IXReceiver, Ownable {
             _depositRequest.underlying
         );
 
-        IERC20(_depositRequest.underlying).safeTransferFrom(
-            msg.sender, 
-            routes[_depositRequest.routeId].route, 
-            _depositRequest.amount
-        );
+        // Check destination domain if not same as current domain, need to bridge
+        if (_depositRequest.bridgeRequest.destinationDomain != connext.domain()) {
 
-        _userDeposit(
-            _depositRequest.routeId, 
-            _depositRequest.amount, 
-            _depositRequest.receiverAddress, 
-            _depositRequest.underlying, 
-            _depositRequest.vaultAddress
-        );
+            bytes memory _payload = abi.encode(
+                _depositRequest.routeId,
+                _depositRequest.amount,
+                _depositRequest.receiverAddress,
+                _depositRequest.underlying,
+                _depositRequest.vaultAddress
+            );
+
+            // User sends funds to this contract
+            IERC20(_depositRequest.underlying).safeTransferFrom(msg.sender, address(this), _depositRequest.amount);
+            // This contract approves transfer to Connext
+            IERC20(_depositRequest.underlying).safeApprove(address(connext), _depositRequest.amount);
+
+            connext.xcall{value: _depositRequest.bridgeRequest.relayerFee}(
+                _depositRequest.bridgeRequest.destinationDomain, 
+                _depositRequest.bridgeRequest.target, 
+                _depositRequest.bridgeRequest.asset, address(0), 
+                _depositRequest.amount, 
+                _depositRequest.bridgeRequest.slippage, 
+                _payload
+            );
+
+        } 
+        // if bridge is not required, deposit in the vault
+        else {
+            IERC20(_depositRequest.underlying).safeTransferFrom(
+                msg.sender, 
+                routes[_depositRequest.routeId].route, 
+                _depositRequest.amount
+            );
+
+            _userDeposit(
+                _depositRequest.routeId, 
+                _depositRequest.amount, 
+                _depositRequest.receiverAddress, 
+                _depositRequest.underlying, 
+                _depositRequest.vaultAddress
+            );
+        }
         
     }
 
