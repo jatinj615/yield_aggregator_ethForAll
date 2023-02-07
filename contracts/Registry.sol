@@ -97,7 +97,8 @@ contract Registry is IXReceiver, Ownable {
             connext.xcall{value: _depositRequest.bridgeRequest.relayerFee}(
                 _depositRequest.bridgeRequest.destinationDomain, 
                 _depositRequest.bridgeRequest.target, 
-                _depositRequest.bridgeRequest.asset, address(0), 
+                _depositRequest.bridgeRequest.asset,
+                address(0), 
                 _depositRequest.amount, 
                 _depositRequest.bridgeRequest.slippage, 
                 _payload
@@ -185,9 +186,9 @@ contract Registry is IXReceiver, Ownable {
     // Registry Management Functions
 
     /**
-     @notice map registry address with domain Id of destination chain
-     @param _registry: address of destination chain registry
-     @param _domainId: Domain ID of destination chain
+     @notice map registry address with domain Id of remote chain
+     @param _registry: address of remote chain registry
+     @param _domainId: Domain ID of remote chain
      */
     function addRegistryForDomain(
         address _registry, 
