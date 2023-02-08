@@ -30,18 +30,17 @@ if (!process.env.MNEMONIC) {
   mnemonic = process.env.MNEMONIC;
 }
 
-// Todo: load alchemy key api for all networks
 let alchemyApiKey: string;
-if (!process.env.ALCHEMY_API_KEY_GOERLI) {
-  throw new Error("Please set your ALCHEMY_API_KEY_GOERLI in a .env file");
+if (!process.env.ALCHEMY_API_KEY) {
+  throw new Error("Please set your ALCHEMY_API_KEY in a .env file");
 } else {
-  alchemyApiKey = process.env.ALCHEMY_API_KEY_GOERLI;
+  alchemyApiKey = process.env.ALCHEMY_API_KEY;
 }
 
 // Todo: load etherscan keys for all networks
 
 function createTestnetConfig(network: keyof typeof networkName): NetworkUserConfig {
-  const url: string = "https://" + network + ".alchemyapi.io/v2/" + alchemyApiKey;
+  const url: string = "https://" + network + ".g.alchemy.com/v2/" + alchemyApiKey;
   return {
     accounts: {
       count: 10,
@@ -82,8 +81,8 @@ const config: HardhatUserConfig = {
     },
     goerli: createTestnetConfig("eth-goerli"),
     optimistic_goerli: createTestnetConfig("opt-goerli"),
+    polygon_mumbai: createTestnetConfig("polygon-mumbai"),
     arbitrum_goerli: createTestnetConfig("arb-goerli"),
-    mumbai: createTestnetConfig("polygon_mumbai")
   },
   namedAccounts: {
     deployer: {

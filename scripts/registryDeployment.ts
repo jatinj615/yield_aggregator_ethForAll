@@ -27,7 +27,7 @@ async function main() {
         const registryAddress = await deployRegistry(connext[network.chainId]);
         console.log(registryAddress);
         // verify Contract
-        verifyContract(registryAddress, [connext[network.chainId]]);
+        await verifyContract(registryAddress, [connext[network.chainId]]);
     } else {
         console.log("Network not found");
     }
