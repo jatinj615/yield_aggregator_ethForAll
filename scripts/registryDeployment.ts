@@ -1,5 +1,6 @@
 import { ethers } from "hardhat";
 import { connext } from './constants';
+import { verifyContract } from "./uitls";
 
 export async function deployRegistry(connextAddress: string): Promise<string> {
     
@@ -7,7 +8,9 @@ export async function deployRegistry(connextAddress: string): Promise<string> {
 
     const registry = await RegistryFactory.deploy(connextAddress);
 
-    await registry.deployed();
+    const tx = await registry.deployed();
+
+    await tx.deployTransaction.wait(5)
 
     console.log("registry deployed")
 
@@ -19,14 +22,17 @@ async function main() {
     
     const [signer] = await ethers.getSigners();
     const network = await signer.provider?.getNetwork();
-    console.log(network?.chainId);
+
     if (network?.chainId) {
         const registryAddress = await deployRegistry(connext[network.chainId]);
         console.log(registryAddress);
+        // verify Contract
+        verifyContract(registryAddress, [connext[network.chainId]]);
     } else {
         console.log("Network not found");
     }
-    
+
+
 }
 
 

@@ -124,7 +124,7 @@ const config: HardhatUserConfig = {
     target: "ethers-v5",
   },
   etherscan: {
-    apiKey: "V5J7NIFIAWBVF81J6XFRRCR4ZH3SIC4DIW"
+    apiKey: "AHCBCYIS5KZQDHKE9CVM64K62NZKQWEMW3"
   }
 };
 

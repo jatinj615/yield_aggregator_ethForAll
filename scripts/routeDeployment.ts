@@ -1,5 +1,6 @@
 import { ethers } from "hardhat";
-import { connext } from './constants';
+import { registries } from './constants';
+import { verifyContract } from "./uitls";
 
 async function deployRoute(registryAddress: string): Promise<string> {
 
@@ -7,7 +8,11 @@ async function deployRoute(registryAddress: string): Promise<string> {
 
     const route = await RouteFactory.deploy(registryAddress);
 
-    await route.deployed();
+    const tx = await route.deployed();
+
+    await tx.deployTransaction.wait(5);
+
+    console.log("route deployed")
 
     return route.address;
 
@@ -16,10 +21,15 @@ async function deployRoute(registryAddress: string): Promise<string> {
 async function main() {
     const [signer] = await ethers.getSigners();
     const network = await signer.provider?.getNetwork();
-    console.log(network?.chainId);
+
     if (network?.chainId) {
-        const routeAddress = await deployRoute(connext[network.chainId]);
+        console.log("deploying route..")
+        const routeAddress = await deployRoute(registries[network.chainId]);
         console.log(routeAddress);
+
+        // verify Contract
+        await verifyContract(routeAddress, [registries[network.chainId]]);
+
     } else {
         console.log("Network not found");
     }
