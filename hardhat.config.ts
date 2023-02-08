@@ -125,7 +125,7 @@ const config: HardhatUserConfig = {
   },
   etherscan: {
     apiKey: {
-      mainnet:"AHCBCYIS5KZQDHKE9CVM64K62NZKQWEMW3",
+      mainnet:"",
       polygon: "",
       optimisticEthereum: "",
       arbitrumOne: "",
