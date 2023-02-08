@@ -13,16 +13,14 @@ import { NetworkUserConfig } from "hardhat/types";
 
 dotenvConfig({ path: resolve(__dirname, "./.env") });
 
-const chainIds = {
-  ganache: 1337,
-  goerli: 5,
-  hardhat: 1,
-  kovan: 42,
-  mainnet: 1,
-  rinkeby: 4,
-  ropsten: 3,
-};
 
+const networkName: { [key: string]: number} = {
+  "eth-goerli": 5,
+  "opt-goerli": 420,
+  "polygon-mumbai": 80001,
+  "arb-goerli": 421613,
+  "hardhat": 1
+}
 
 // Ensure that we have all the environment variables we need.
 let mnemonic: string;
@@ -32,15 +30,18 @@ if (!process.env.MNEMONIC) {
   mnemonic = process.env.MNEMONIC;
 }
 
+// Todo: load alchemy key api for all networks
 let alchemyApiKey: string;
-if (!process.env.ALCHEMY_API_KEY) {
-  throw new Error("Please set your ALCHEMY_API_KEY in a .env file");
+if (!process.env.ALCHEMY_API_KEY_GOERLI) {
+  throw new Error("Please set your ALCHEMY_API_KEY_GOERLI in a .env file");
 } else {
-  alchemyApiKey = process.env.ALCHEMY_API_KEY;
+  alchemyApiKey = process.env.ALCHEMY_API_KEY_GOERLI;
 }
 
-function createTestnetConfig(network: keyof typeof chainIds): NetworkUserConfig {
-  const url: string = "https://eth-" + network + ".alchemyapi.io/v2/" + alchemyApiKey;
+// Todo: load etherscan keys for all networks
+
+function createTestnetConfig(network: keyof typeof networkName): NetworkUserConfig {
+  const url: string = "https://" + network + ".alchemyapi.io/v2/" + alchemyApiKey;
   return {
     accounts: {
       count: 10,
@@ -48,7 +49,7 @@ function createTestnetConfig(network: keyof typeof chainIds): NetworkUserConfig 
       mnemonic,
       path: "m/44'/60'/0'/0",
     },
-    chainId: chainIds[network],
+    chainId: networkName[network],
     url,
   };
 }
@@ -71,7 +72,7 @@ const config: HardhatUserConfig = {
       // accounts: {
       //   mnemonic,
       // },
-      chainId: chainIds.hardhat,
+      chainId: networkName["hardhat"],
       live: false,
       saveDeployments: true,
       tags: ["test", "local"],
@@ -79,10 +80,10 @@ const config: HardhatUserConfig = {
         url: "https://eth-mainnet.alchemyapi.io/v2/" + alchemyApiKey
       }
     },
-    goerli: createTestnetConfig("goerli"),
-    kovan: createTestnetConfig("kovan"),
-    rinkeby: createTestnetConfig("rinkeby"),
-    ropsten: createTestnetConfig("ropsten"),
+    goerli: createTestnetConfig("eth-goerli"),
+    optimistic_goerli: createTestnetConfig("opt-goerli"),
+    arbitrum_goerli: createTestnetConfig("arb-goerli"),
+    mumbai: createTestnetConfig("polygon_mumbai")
   },
   namedAccounts: {
     deployer: {
@@ -124,7 +125,12 @@ const config: HardhatUserConfig = {
     target: "ethers-v5",
   },
   etherscan: {
-    apiKey: "AHCBCYIS5KZQDHKE9CVM64K62NZKQWEMW3"
+    apiKey: {
+      mainnet:"AHCBCYIS5KZQDHKE9CVM64K62NZKQWEMW3",
+      polygon: "",
+      optimisticEthereum: "",
+      arbitrumOne: "",
+    }
   }
 };
 
