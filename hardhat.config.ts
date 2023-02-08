@@ -22,6 +22,7 @@ const networkName: { [key: string]: number} = {
   "hardhat": 1
 }
 
+// TODO: refactor to a clean code
 // Ensure that we have all the environment variables we need.
 let mnemonic: string;
 if (!process.env.MNEMONIC) {
@@ -37,7 +38,35 @@ if (!process.env.ALCHEMY_API_KEY) {
   alchemyApiKey = process.env.ALCHEMY_API_KEY;
 }
 
-// Todo: load etherscan keys for all networks
+let etherScanApiKey: string;
+if (!process.env.ETHERSCAN_API_KEY) {
+  throw new Error("Please set your ETHERSCAN_API_KEY in a .env file");
+} else {
+  etherScanApiKey = process.env.ETHERSCAN_API_KEY;
+}
+
+let polygonScanApiKey: string;
+if (!process.env.POLYGON_SCAN_API_KEY) {
+  throw new Error("Please set your POLYGON_SCAN_API_KEY in a .env file");
+} else {
+  polygonScanApiKey = process.env.POLYGON_SCAN_API_KEY;
+}
+
+let optimismScanApiKey: string;
+if (!process.env.OPTIMISM_SCAN_API_KEY) {
+  throw new Error("Please set your OPTIMISM_SCAN_API_KEY in a .env file");
+} else {
+  optimismScanApiKey = process.env.OPTIMISM_SCAN_API_KEY;
+}
+
+let arbitrumScanApiKey: string;
+if (!process.env.ARBITRUM_SCAN_API_KEY) {
+  throw new Error("Please set your ARBITRUM_SCAN_API_KEY in a .env file");
+} else {
+  arbitrumScanApiKey = process.env.ARBITRUM_SCAN_API_KEY;
+}
+// End of env variables //
+
 
 function createTestnetConfig(network: keyof typeof networkName): NetworkUserConfig {
   const url: string = "https://" + network + ".g.alchemy.com/v2/" + alchemyApiKey;
@@ -125,10 +154,10 @@ const config: HardhatUserConfig = {
   },
   etherscan: {
     apiKey: {
-      mainnet:"",
-      polygon: "",
-      optimisticEthereum: "",
-      arbitrumOne: "",
+      mainnet: etherScanApiKey,
+      polygon: polygonScanApiKey,
+      optimisticEthereum: optimismScanApiKey,
+      arbitrumOne: arbitrumScanApiKey,
     }
   }
 };
