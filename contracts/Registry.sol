@@ -5,6 +5,7 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import {IConnext} from "@connext/smart-contracts/contracts/core/connext/interfaces/IConnext.sol";
 import {IXReceiver} from "@connext/smart-contracts/contracts/core/connext/interfaces/IXReceiver.sol";
+import "./interfaces/external/aaveV3/types/DataTypes.sol";
 import "./interfaces/IRoute.sol";
 import "./helpers/Errors.sol";
 
@@ -23,7 +24,6 @@ contract Registry is IXReceiver, Ownable {
         uint32 destinationDomain;
         uint256 relayerFee;
         uint256 slippage;
-        address target;
         address asset;
     }
 
@@ -34,11 +34,6 @@ contract Registry is IXReceiver, Ownable {
         address underlying;
         address receiverAddress;
         BridgeRequest bridgeRequest;
-    }
-
-    struct UserRequest {
-        VaultRequest vaultRequest;
-        bytes socketLLData;
     }
 
     struct RemoteRegistry {
@@ -87,7 +82,7 @@ contract Registry is IXReceiver, Ownable {
 
         // Check destination domain if not same as current domain, need to bridge
         if (_depositRequest.bridgeRequest.destinationDomain != connext.domain()) {
-
+            if (registryForDomains[_depositRequest.bridgeRequest.destinationDomain] == address(0)) revert Errors.DomainNotSupported();
             bytes memory _payload = abi.encode(
                 _depositRequest.routeId,
                 _depositRequest.receiverAddress,
@@ -101,7 +96,7 @@ contract Registry is IXReceiver, Ownable {
 
             connext.xcall{value: _depositRequest.bridgeRequest.relayerFee}(
                 _depositRequest.bridgeRequest.destinationDomain, 
-                _depositRequest.bridgeRequest.target, 
+                registryForDomains[_depositRequest.bridgeRequest.destinationDomain], 
                 _depositRequest.bridgeRequest.asset,
                 address(0), 
                 _depositRequest.amount, 
@@ -127,6 +122,43 @@ contract Registry is IXReceiver, Ownable {
             );
         }
         
+    }
+
+    function userWithdrawRequest(
+        VaultRequest calldata _withdrawRequest
+    )   external 
+        payable 
+        onlyExistingRoutes(_withdrawRequest.routeId)
+        returns (uint256)
+    {
+        _checkUserRequest(
+            _withdrawRequest.amount, 
+            _withdrawRequest.receiverAddress, 
+            _withdrawRequest.vaultAddress, 
+            _withdrawRequest.underlying
+        );
+        
+        // transfer yield bearing token from user wallet to route
+        address yieldBreaingToken = IRoute(routes[_withdrawRequest.routeId].route).
+                                        getYieldBearingToken(
+                                            _withdrawRequest.underlying, 
+                                            _withdrawRequest.vaultAddress
+                                        );
+                                        
+        IERC20(yieldBreaingToken).safeTransferFrom(
+            msg.sender, 
+            routes[_depositRequest.routeId].route, 
+            _depositRequest.amount
+        );
+
+        uint256 withdrawnAmount = IRoute(routes[_withdrawRequest.routeId].route).withdraw(
+            _withdrawRequest.amount, 
+            _withdrawRequest.receiverAddress, 
+            _withdrawRequest.underlying, 
+            _withdrawRequest.vaultAddress
+        );
+
+        return withdrawnAmount;
     }
 
     

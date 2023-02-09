@@ -2,6 +2,7 @@ pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "../interfaces/external/aaveV3/types/DataTypes.sol";
 import "../interfaces/external/aaveV3/IPoolAddressesProvider.sol";
 import "../interfaces/external/aaveV3/IPool.sol";
 import "./RouteBase.sol";
@@ -24,6 +25,14 @@ contract AaveRoute is RouteBase {
     ) external override onlyRegistry {
         IERC20(_underlying).safeApprove(_vaultAddress, _amount);
         IPool(_vaultAddress).supply(_underlying, _amount, _receiver, 0);
+    }
+
+    function getYieldBearingToken(
+        address _underlying, 
+        address _vaultAddress
+    ) external view override returns(address) {
+        DataTypes.ReserveData memory poolReserves = IPool(_vaultAddress).getReserveData(_underlying);
+        return poolReserves.aTokenAddress;
     }
 
     function withdraw(

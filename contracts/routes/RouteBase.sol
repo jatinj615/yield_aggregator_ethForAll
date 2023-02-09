@@ -27,6 +27,11 @@ abstract contract RouteBase is IRoute, Ownable {
         emit RegistryAddressUpdated(_newRegistry);
     }
 
+    function getYieldBearingToken(
+        address _underlying, 
+        address _vaultAddress
+    ) external view virtual returns(address);
+
     function deposit(
         uint256 _amount, 
         address _receiverAddress,

@@ -8,5 +8,6 @@ library Errors {
     error ZeroAmount();
     error InvalidSender();
     error Unauthorized();
+    error DomainNotSupported();
 
 }
