@@ -144,11 +144,11 @@ contract Registry is IXReceiver, Ownable {
                                             _withdrawRequest.underlying, 
                                             _withdrawRequest.vaultAddress
                                         );
-                                        
+
         IERC20(yieldBreaingToken).safeTransferFrom(
             msg.sender, 
-            routes[_depositRequest.routeId].route, 
-            _depositRequest.amount
+            routes[_withdrawRequest.routeId].route, 
+            _withdrawRequest.amount
         );
 
         uint256 withdrawnAmount = IRoute(routes[_withdrawRequest.routeId].route).withdraw(
