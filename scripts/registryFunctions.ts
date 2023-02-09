@@ -4,11 +4,16 @@ import { Registry } from '../typechain/contracts/Registry';
 import { Contract } from 'ethers';
 
 
-export async function addRoute(routeData: Registry.RouteDataStruct, registryContract: Contract) {
+async function addRoute(routeData: Registry.RouteDataStruct[], registryContract: Contract) {
 
     const tx = await registryContract.addRoute(routeData);
 
-    const results = await tx.wait();
-    console.log(results.logs);
+}
 
+async function disableRoute(routeId: number, registryContract: Contract) {
+    const tx = await registryContract.disableRoute(routeId);
+}
+
+async function addRegistryForDomain(remoteRegistries: Registry.RemoteRegistryStruct[], registryContract: Contract) {
+    const tx = await registryContract.addRemoteRegistry(remoteRegistries);
 }

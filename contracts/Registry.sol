@@ -41,6 +41,11 @@ contract Registry is IXReceiver, Ownable {
         bytes socketLLData;
     }
 
+    struct RemoteRegistry {
+        uint32 domainId;
+        address reomoteRegistry;
+    }
+
     RouteData[] public routes;
 
     mapping(uint32 => address) public registryForDomains;
@@ -187,15 +192,15 @@ contract Registry is IXReceiver, Ownable {
 
     /**
      @notice map registry address with domain Id of remote chain
-     @param _registry: address of remote chain registry
-     @param _domainId: Domain ID of remote chain
+     @param _remoteRegistries: list of remote registries
      */
-    function addRegistryForDomain(
-        address _registry, 
-        uint32 _domainId
+    function addRemoteRegistry(
+        RemoteRegistry[] calldata _remoteRegistries
     ) external onlyOwner {
-        if (_registry == address(0)) revert Errors.ZeroAddress();
-        registryForDomains[_domainId] = _registry;
+        for (uint256 i = 0; i < _remoteRegistries.length; i++) {
+            if (_remoteRegistries[i].reomoteRegistry == address(0)) revert Errors.ZeroAddress();
+            registryForDomains[_remoteRegistries[i].domainId] = _remoteRegistries[i].reomoteRegistry;
+        }
     }
 
     // Route Management Functions

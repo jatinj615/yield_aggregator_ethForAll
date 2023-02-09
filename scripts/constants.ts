@@ -19,9 +19,3 @@ export const connextDomain: { [key: number]: number} = {
     421613: 421613
 }
 
-export const chainIdName: { [key: number]: string} = {
-    5: "eth-goerli",
-    420: "opt-goerli",
-    80001: "polygon-mumbai",
-    421613: "arb-goerli"
-}
