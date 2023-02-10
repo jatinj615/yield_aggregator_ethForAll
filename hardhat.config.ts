@@ -68,6 +68,20 @@ if (!process.env.ARBITRUM_SCAN_API_KEY) {
 // End of env variables //
 
 
+function createSolidityVersion(version: string) {
+  return {
+    version: version,
+    settings: {
+      // https://hardhat.org/hardhat-network/#solidity-optimizer-support
+      optimizer: {
+        enabled: true,
+        runs: 200,
+      },
+    },
+  };
+}
+
+
 function createTestnetConfig(network: keyof typeof networkName): NetworkUserConfig {
   const url: string = "https://" + network + ".g.alchemy.com/v2/" + alchemyApiKey;
   return {
@@ -129,22 +143,9 @@ const config: HardhatUserConfig = {
   },
   solidity: {
     compilers: [
-      {
-        version: "0.8.17",
-        settings: {
-          metadata: {
-            // Not including the metadata hash
-            bytecodeHash: "none",
-          },
-          optimizer: {
-            enabled: true,
-            runs: 999999,
-          },
-        },
-      }, 
-      {
-        version: "0.8.10"
-      }
+      createSolidityVersion("0.8.0"),
+      createSolidityVersion("0.8.10"),
+      createSolidityVersion("0.8.17")
     ]
     
   },
@@ -161,6 +162,5 @@ const config: HardhatUserConfig = {
     }
   }
 };
-
 
 export default config;
