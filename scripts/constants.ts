@@ -19,3 +19,18 @@ export const connextDomain: { [key: number]: number} = {
     421613: 421613
 }
 
+export const registryRoutes: { [key: number]: { [key: number] : string}} = {
+    5: {
+        0: "0xAA0BCDCE7D01216403418D37f2dE4F84Ab71DE89"
+    },
+    420: {
+        0: "0x68B66f64D5a902A0f21E886469B3487bcAa79035"
+    },
+    80001: {
+        0: "0xc9a9969CFd274E357Cc1613fA957b25dCe6aBa85"
+    },
+    421613: {
+        0: "0x68B66f64D5a902A0f21E886469B3487bcAa79035"
+    }
+}
+

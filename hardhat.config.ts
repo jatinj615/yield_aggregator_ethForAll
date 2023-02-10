@@ -155,7 +155,7 @@ const config: HardhatUserConfig = {
   },
   etherscan: {
     apiKey: {
-      mainnet: etherScanApiKey,
+      goerli: etherScanApiKey,
       polygonMumbai: polygonScanApiKey,
       optimisticGoerli: optimismScanApiKey,
       arbitrumGoerli: arbitrumScanApiKey,
