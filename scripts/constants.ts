@@ -7,9 +7,9 @@ export const connext: { [key: number]: string} = {
 
 export const registries: { [key: number]: string } = {
     5: "0xba3a68108E5F0922E84870A48aa986Bb1E12Ec93",
-    420: "",
-    80001: "",
-    421613: ""
+    420: "0x424DcB01B81C11F0663fF5e5CdbB405C0dB6f7C5",
+    80001: "0xd3BBd3D02c8ff898d106a2539bb8afD0fCF9dec1",
+    421613: "0x424DcB01B81C11F0663fF5e5CdbB405C0dB6f7C5"
 }
 
 export const connextDomain: { [key: number]: number} = {
