@@ -4,6 +4,8 @@ import { Registry } from '../typechain/contracts/Registry';
 import { Contract } from 'ethers';
 import { Registry__factory } from '../typechain/factories/contracts/Registry__factory';
 
+
+
 // Management functions
 async function addRoute(routeAddress: string, registryAddress: string) {
 
