@@ -6,7 +6,7 @@ export const connext: { [key: number]: string} = {
 }
 
 export const registries: { [key: number]: string } = {
-    5: "0xba3a68108E5F0922E84870A48aa986Bb1E12Ec93",
+    5: "0x7081301737A591fa881e6aB13bA02Cf10231305c",
     420: "0x424DcB01B81C11F0663fF5e5CdbB405C0dB6f7C5",
     80001: "0xd3BBd3D02c8ff898d106a2539bb8afD0fCF9dec1",
     421613: "0x424DcB01B81C11F0663fF5e5CdbB405C0dB6f7C5"
@@ -21,7 +21,7 @@ export const connextDomain: { [key: number]: number} = {
 
 export const registryRoutes: { [key: number]: { [key: number] : string}} = {
     5: {
-        0: "0xAA0BCDCE7D01216403418D37f2dE4F84Ab71DE89"
+        0: "0xEc8801FA4A554DAD9cCe27b7294c93A5CD764C26"
     },
     420: {
         0: "0x68B66f64D5a902A0f21E886469B3487bcAa79035"
