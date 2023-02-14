@@ -16,7 +16,6 @@ export function useNetwork(library: Web3Provider | undefined): string {
     const fetchNetwork = async () => {
       try {
         const network = await library?.getNetwork();
-        console.log('test', network);
         if (!active) {
           return;
         }

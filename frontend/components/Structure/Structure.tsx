@@ -119,7 +119,6 @@ export default function Structure({ children }: any) {
     setItem('theme', 'dark');
     setTheme('dark');
   };
-
   return (
     <>
       {/* html head tag */}
@@ -166,7 +165,7 @@ export default function Structure({ children }: any) {
                     sx={{ borderRadius: theme.typography.pxToRem(5) }}
                     label={network && network === NetworkName.MAINNET ? 'mainnet' : network || NetworkName.GOERLI}
                     variant="outlined"
-                    color={network ? 'error' : 'default'}
+                    color={network ? 'default' : 'error'}
                   />
                   <Tooltip title="Wallet Connection Settings">
                     <Chip

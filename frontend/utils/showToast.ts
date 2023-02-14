@@ -9,7 +9,6 @@ import { APP_REDIRECT_NETWORK, ChainNameFromNetworkName, SUPPORTED_NETWORKS } fr
 export const showUnsupportedNetworkToast = (setToastData: ToastContextInterface['setToastData']): void => {
   // * toast message
   const id = uuidv4();
-  console.log(setToastData)
   if (!isUndefined(setToastData)) {
     setToastData((prevContext) => {
       // object that we want to update

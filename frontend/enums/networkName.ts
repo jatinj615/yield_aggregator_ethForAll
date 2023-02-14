@@ -1,7 +1,7 @@
 export enum NetworkName {
   MAINNET = 'homestead',
   GOERLI = 'goerli',
-  OPTIMISM = 'optimistic-goerli',
+  OPTIMISM = 'optimism-goerli',
   ARBITRUM = 'arbitrum-goerli',
   MUMBAI= 'maticmum'
 }

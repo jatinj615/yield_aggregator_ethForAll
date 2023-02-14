@@ -37,15 +37,14 @@ function InnerUnrealApp({ Component, pageProps }: AppProps) {
   // Update the theme only if the mode changes
   const theme = useMemo(() => createTheme(getDesignTokens(mode)), [mode]);
 
-  useEffect(() => {
-    console.log(network)
-    if (network && !(network in SUPPORTED_NETWORKS)) {
-      showUnsupportedNetworkToast(setToastData);
-      if (network === APP_REDIRECT_NETWORK) {
-        showRedirectNetworkToast(setToastData);
-      }
-    }
-  }, [network]);
+  // useEffect(() => {
+  //   if (network && !(network in SUPPORTED_NETWORKS)) {
+  //     showUnsupportedNetworkToast(setToastData);
+  //     if (network === APP_REDIRECT_NETWORK) {
+  //       showRedirectNetworkToast(setToastData);
+  //     }
+  //   }
+  // }, [network]);
 
   useEffect(() => {
     if (getItem('theme')) {
