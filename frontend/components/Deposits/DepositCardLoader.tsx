@@ -38,15 +38,15 @@ function DepositCardLoader({ theme, rowHeight }: IDepositCardLoaderProps) {
       {/* Vault APY */}
       <VaultAPY minWidth={depositColumns.vaultAPY.minWidth} loading />
       {/* LP APY */}
-      <LPAPY minWidth={depositColumns.lpAPY.minWidth} loading theme={theme} />
+      {/* <LPAPY minWidth={depositColumns.lpAPY.minWidth} loading theme={theme} /> */}
       {/* Liquidity */}
-      <Liquidity minWidth={depositColumns.liquidity.minWidth} loading theme={theme} />
+      {/* <Liquidity minWidth={depositColumns.liquidity.minWidth} loading theme={theme} /> */}
       {/* Price */}
-      <Price minWidth={depositColumns.price.minWidth} loading theme={theme} />
+      {/* <Price minWidth={depositColumns.price.minWidth} loading theme={theme} /> */}
       {/* Fixed APR */}
-      <FixedAPR minWidth={depositColumns.fixedAPR.minWidth} loading />
+      {/* <FixedAPR minWidth={depositColumns.fixedAPR.minWidth} loading /> */}
       {/* Term */}
-      <Term minWidth={depositColumns.term.minWidth} loading theme={theme} />
+      {/* <Term minWidth={depositColumns.term.minWidth} loading theme={theme} /> */}
     </Grid>
   );
 }

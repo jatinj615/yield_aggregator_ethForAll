@@ -24,8 +24,6 @@ import SkeletonLoader from 'components/Common/SkeletonLoader';
 
 import { useStoreActions } from 'store/globalStore';
 import useERC20 from 'hooks/useERC20';
-import useUnrealCore from 'hooks/useUnrealCore';
-import core from 'hooks/contracts/core';
 import { useNetwork } from 'hooks/ethereum';
 import { formatNumber, intlFormatNumber, isIncorrectNumberFormat } from 'utils';
 import { constantStrings } from 'utils/constants';
@@ -121,7 +119,6 @@ export default function DepositCardModal({
   const erc20 = useERC20();
   const underlyingToken = useMemo(() => erc20(underlying), [erc20, underlying]);
   const { setShouldUpdateDepositCard } = useStoreActions((action) => action);
-  const { mint, getOTYTCount, redeemPrinciple, redeemYield } = useUnrealCore(streamKey);
   const { setShowConnectWalletModal } = useContext(ToastContext);
   const {
     activate: activateActiveConnector,

@@ -9,8 +9,6 @@ import { chain } from 'utils/lodash';
 // hooks
 import { useEffect, useState } from 'react';
 import { useStoreActions, useStoreState } from 'store/globalStore';
-import { getAllActiveEpoches, getRelatedPools } from 'hooks/useDepositGql';
-import { useGetAaveAPY, useGetCompoundAPY } from 'hooks/useApyGql';
 
 // utils
 import { depositDatagridRowHeight, getDepositDatagridColumns } from 'utils/datagrid';
@@ -36,25 +34,6 @@ interface IObject {
   [key: string]: any;
 }
 
-// contains the list of pool ids from kovan.ts
-const poolIds: string[] = [];
-
-// Dictionary of type epochaddress => kovan.ts block
-const kovanPoolData: IObject = {};
-
-forEach(contract.epochs, (item) => {
-  kovanPoolData[item.address.toLowerCase()] = item;
-  poolIds.push(item.otPool.poolId);
-  poolIds.push(item.ytPool.poolId);
-});
-
-// holds all vault addresses
-const vaultAddresses: string[] = [];
-
-forOwn(contract.vaults.yearn, (value, key) => {
-  vaultAddresses.push(value);
-});
-
 export default function DepositCardStack() {
   const { shouldUpdateDepositCard } = useStoreState((state) => state);
   const { setShouldUpdateDepositCard } = useStoreActions((action) => action);
@@ -71,103 +50,11 @@ export default function DepositCardStack() {
   const [priceRateLoading, setPriceRateLoading] = useState<boolean>(false);
   const [AaveDataLoading, setAaveDataLoading] = useState<boolean>(false);
   const [showDepositCardModal, setShowDepositCardModal] = useState<boolean>(false);
-  const [underlyingTokenSymbol, setUnderlyingTokenSymbol] = useState<string>('');
-  const [otSymbol, setOtSymbol] = useState<string>('');
-  const [ytSymbol, setYtSymbol] = useState<string>('');
-  const [durationSeconds, setDurationSeconds] = useState<number>(0);
-  const [protocol, setProtocol] = useState<string>('');
-  const [otAddress, setOtAddress] = useState<string>('');
-  const [ytAddress, setYtAddress] = useState<string>('');
-  const [streamKey, setStreamKey] = useState<string>('');
-  const [underlyingDecimals, setUnderlyingDecimals] = useState<number>(18);
   const [underlying, setUnderlying] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(true);
   const [selectionModel, setSelectionModel] = useState<GridSelectionModel>([]);
   const [listItems, setListItems] = useState<IObject[]>([{ label: constantStrings.allProtocols, value: '' }]);
-  const [yearnAllData, setYearnAllData] = useState<IObject>();
-  const [yearnAllLoading, setYearnAllLoading] = useState<boolean>(false);
 
-  const {
-    loading: loadingAllActiveStreams,
-    error: errorAllActiveStreams,
-    data: dataAllActiveStreams,
-    refetch: refetchAllActiveStreams,
-    networkStatus: networkStatusAllActiveStreams,
-    startPolling: startPollingAllActiveStreams,
-    stopPolling: stopPollingAllActiveStreams
-  } = getAllActiveEpoches(selectedFilter);
-
-  const {
-    loading: loadingPoolStats,
-    error: errorPoolStats,
-    data: dataPoolStats,
-    refetch: refetchPoolStats,
-    networkStatus: networkStatusPoolStats,
-    startPolling: startPollingPoolStats,
-    stopPolling: stopPollingPoolStats
-  } = getRelatedPools(poolIds);
-
-  const [
-    getAaveAPY,
-    {
-      loading: loadingAaveAPY,
-      error: errorAaveAPY,
-      data: dataAaveAPY,
-      refetch: refetchAaveAPY,
-      networkStatus: networkStatusAaveAPY,
-      startPolling: startPollingAaveAPY,
-      stopPolling: stopPollingAaveAPY
-    }
-  ] = useGetAaveAPY();
-
-  const [
-    getCompoundAPY,
-    {
-      loading: loadingCompoundAPY,
-      error: errorCompoundAPY,
-      data: dataCompoundAPY,
-      refetch: refetchCompoundAPY,
-      networkStatus: networkStatusCompoundAPY,
-      startPolling: startPollingCompoundAPY,
-      stopPolling: stopPollingCompoundAPY
-    }
-  ] = useGetCompoundAPY();
-
-  useEffect(() => {
-    let isActive = true;
-
-    const fetchYearnAPY = async (underlyingAddresses) => {
-      setYearnAllLoading(false);
-
-      try {
-        const dataYearnAPY = await getYearnAPY(underlyingAddresses, vaultAddresses);
-        if (!isActive) {
-          return;
-        }
-        setYearnAllData(dataYearnAPY);
-      } finally {
-        setYearnAllLoading(true);
-      }
-    };
-
-    if (networkStatusAllActiveStreams === NetworkStatus.ready) {
-      const underlyingAddresses = chain(dataAllActiveStreams?.streams)
-        .filter((stream: any) => kovanPoolData[stream?.currentEpoch?.address.toLowerCase()])
-        .map((stream: any) => stream?.underlying)
-        .value();
-
-      // TODO: Fix this vault apy issue
-      // getAaveAPY({ variables: { underlyingAddresses } });
-      // getCompoundAPY({ variables: { underlyingAddresses } });
-      fetchYearnAPY(underlyingAddresses);
-    }
-
-    // Clean the state when the component is unmounted
-    return () => {
-      isActive = false;
-      setYearnAllData(null);
-    };
-  }, [networkStatusAllActiveStreams]);
 
   useEffect(() => {
     let active = true;
@@ -218,20 +105,6 @@ export default function DepositCardStack() {
       setAaveData(null);
     };
   }, []);
-
-  useEffect(() => {
-    if (shouldUpdateDepositCard?.shouldUpdate) {
-      refetchAllActiveStreams({
-        protocolFilter: selectedFilter
-      });
-      // Refetch all active streams every 2 seconds after a transaction is performed
-      startPollingAllActiveStreams(2000);
-      setShouldUpdateDepositCard({
-        shouldUpdate: false,
-        underlyingAddress: shouldUpdateDepositCard?.underlyingAddress
-      });
-    }
-  }, [shouldUpdateDepositCard]);
 
   useEffect(() => {
     getDepositCardData({
@@ -299,46 +172,16 @@ export default function DepositCardStack() {
   };
 
   const resetDepositCardModal = () => {
-    setUnderlyingTokenSymbol('');
-    setOtSymbol('');
-    setYtSymbol('');
-    setDurationSeconds(0);
-    setProtocol('');
-    setOtAddress('');
-    setYtAddress('');
-    setStreamKey('');
     setUnderlying('');
-    setUnderlyingDecimals(18);
   };
 
   const handleRowClick = (params, event, details) => {
     resetDepositCardModal();
-    setUnderlyingTokenSymbol(params?.row?.name);
-    setOtSymbol(params?.row?.otSymbol);
-    setYtSymbol(params?.row?.ytSymbol);
-    setDurationSeconds(params?.row?.durationSeconds);
-    setProtocol(params?.row?.protocol);
-    setOtAddress(params?.row?.otAddress);
-    setYtAddress(params?.row?.ytAddress);
-    setStreamKey(params?.row?.streamKey);
-    setUnderlying(params?.row?.underlying);
-    setUnderlyingDecimals(params?.row?.underlyingDecimals);
-    setShowDepositCardModal(true);
   };
 
-  return (
-    <>
-      <SearchBar
-        onSearchChange={handleSearchChange}
-        listSelectedValue={selectedFilter}
-        listItems={listItems}
-        onListChange={handleListChange}
-      />
-      {/* <div className="mt-3 ml-10">
-        <Tabs selectedValue={selected} onSelected={handleFilterChange} list={list} />
-      </div> */}
 
-      {showDepositCardModal && (
+  /* 
+        {showDepositCardModal && (
         <DepositCardModal
           showDialog={showDepositCardModal}
           setShowDialog={handleShowDepositCardModal}
@@ -353,7 +196,19 @@ export default function DepositCardStack() {
           underlying={underlying}
           underlyingDecimals={underlyingDecimals}
         />
-      )}
+  */
+
+  return (
+    <>
+      <SearchBar
+        onSearchChange={handleSearchChange}
+        listSelectedValue={selectedFilter}
+        listItems={listItems}
+        onListChange={handleListChange}
+      />
+      {/* <div className="mt-3 ml-10">
+        <Tabs selectedValue={selected} onSelected={handleFilterChange} list={list} />
+      </div> */}
       <Slide direction={transitionDirection} in={toggleTransition} timeout={150} mountOnEnter unmountOnExit>
         <Box
           sx={{
@@ -407,12 +262,12 @@ export default function DepositCardStack() {
               loadingOverlay: { theme, rowHeight: depositDatagridRowHeight },
               noRowsOverlay: { noRowsMessage: 'No Results' }
             }}
-            loading={loadingAllActiveStreams || loadingPoolStats || loading}
+            loading={AaveDataLoading || priceRateLoading || loading}
           />
         </Box>
       </Slide>
 
-      {errorPoolStats || errorAllActiveStreams ? <div>{constantStrings.error}</div> : null}
+      {/* {errorPoolStats || errorAllActiveStreams ? <div>{constantStrings.error}</div> : null} */}
     </>
   );
 }
