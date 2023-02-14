@@ -23,7 +23,6 @@ import { useEagerConnect, useFormattedWalletAddress, useInactiveListener, useNet
 import makeBlockie from 'ethereum-blockies-base64';
 import Container from 'components/Common/Container';
 import SkeletonLoader from 'components/Common/SkeletonLoader';
-// import { TopbarItems } from 'constants/TopbarConstants';
 import BackgroundIcon from 'assets/svg/background-icon.svg';
 import { useRouter } from 'next/router';
 import { Circle as CircleIcon, DarkMode as DarkModeIcon, LightMode as LightModeIcon } from '@mui/icons-material';
@@ -50,7 +49,6 @@ export default function Structure({ children }: any) {
   const {
     shouldUpdate,
     shouldUpdateDepositCard,
-    showContractBanner,
     theme: themeSelected
   } = useStoreState((state) => state);
   const { account, active, library } = useWeb3React<Web3Provider>();
@@ -70,8 +68,7 @@ export default function Structure({ children }: any) {
 
   const open = Boolean(anchorEl);
 
-  const blockieSrc = React.useMemo(() => (active ? account : 'Yielder'), [active, account]);
-  const mainPageHeight = `calc(100vh - ${showContractBanner ? bannerHeight : 0}px)`;
+  const blockieSrc = React.useMemo(() => (active ? account : 'tester'), [active, account]);
 
   React.useEffect(() => {
     let active = true;
@@ -101,13 +98,6 @@ export default function Structure({ children }: any) {
     };
   }, [signer, shouldUpdate, shouldUpdateDepositCard]);
 
-  // React.useEffect(() => {
-  //   const { title: titleFound = '', subtitle: subtitleFound = '' } =
-  //     find(TopbarItems, ({ link }) => router.pathname === link) ?? {};
-  //   setTitle(titleFound);
-  //   setSubtitle(subtitleFound);
-  // }, [router.pathname]);
-
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -132,6 +122,12 @@ export default function Structure({ children }: any) {
 
   return (
     <>
+      {/* html head tag */}
+      <Head>
+        {/* favicon for the app */}
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+
       {/* override the global css */}
       <GlobalStyles styles={{ body: { backgroundColor: theme.palette.background.default } }} />
 
@@ -147,7 +143,7 @@ export default function Structure({ children }: any) {
       {/* main page content */}
       <Grid
         sx={{
-          height: mainPageHeight,
+          height: '100px',
           '& .MuiGrid-root.MuiGrid-item': {
             '&.MuiGrid-item--navbar,&.MuiGrid-item--container': {
               width: '100%',
@@ -270,7 +266,9 @@ export default function Structure({ children }: any) {
             </Stack>
           </Grid>
         </Grid>
-        <Container>{children}</Container>
+        <Container>
+          {children}
+        </Container>
       </Grid>
     </>
   );

@@ -80,60 +80,60 @@ export const getDepositDatagridColumns = (theme: Theme): GridColumns => {
       sortable: false,
       disableColumnMenu: true
     },
-    {
-      field: 'lpApyOt',
-      headerName: 'LP APY',
-      minWidth: depositColumns.lpAPY.minWidth,
-      flex: 1,
-      renderCell: (params: GridRenderCellParams<BigNumber>) => {
-        return <LPAPY params={params} theme={theme} />;
-      },
-      sortable: false,
-      disableColumnMenu: true
-    },
-    {
-      field: 'otPoolLiquidity',
-      headerName: 'Liquidity',
-      minWidth: depositColumns.liquidity.minWidth,
-      flex: 1,
-      renderCell: (params: GridRenderCellParams<BigNumber>) => {
-        return <Liquidity params={params} theme={theme} />;
-      },
-      sortable: false,
-      disableColumnMenu: true
-    },
-    {
-      field: 'otPrice',
-      headerName: 'Price',
-      minWidth: depositColumns.price.minWidth,
-      flex: 1,
-      renderCell: (params: GridRenderCellParams<BigNumber>) => {
-        return <Price params={params} theme={theme} />;
-      },
-      sortable: false,
-      disableColumnMenu: true
-    },
-    {
-      field: 'otFixedAPR',
-      headerName: 'Fixed APR',
-      minWidth: depositColumns.fixedAPR.minWidth,
-      flex: 1,
-      renderCell: (params: GridRenderCellParams<BigNumber>) => {
-        return <FixedAPR params={params} />;
-      },
-      sortable: false,
-      disableColumnMenu: true
-    },
-    {
-      field: 'endDate',
-      headerName: 'Term',
-      minWidth: depositColumns.term.minWidth,
-      flex: 1,
-      renderCell: (params: GridRenderCellParams<string>) => {
-        return <Term params={params} theme={theme} />;
-      },
-      sortable: false,
-      disableColumnMenu: true
-    }
+    // {
+    //   field: 'lpApyOt',
+    //   headerName: 'LP APY',
+    //   minWidth: depositColumns.lpAPY.minWidth,
+    //   flex: 1,
+    //   renderCell: (params: GridRenderCellParams<BigNumber>) => {
+    //     return <LPAPY params={params} theme={theme} />;
+    //   },
+    //   sortable: false,
+    //   disableColumnMenu: true
+    // },
+    // {
+    //   field: 'otPoolLiquidity',
+    //   headerName: 'Liquidity',
+    //   minWidth: depositColumns.liquidity.minWidth,
+    //   flex: 1,
+    //   renderCell: (params: GridRenderCellParams<BigNumber>) => {
+    //     return <Liquidity params={params} theme={theme} />;
+    //   },
+    //   sortable: false,
+    //   disableColumnMenu: true
+    // },
+    // {
+    //   field: 'otPrice',
+    //   headerName: 'Price',
+    //   minWidth: depositColumns.price.minWidth,
+    //   flex: 1,
+    //   renderCell: (params: GridRenderCellParams<BigNumber>) => {
+    //     return <Price params={params} theme={theme} />;
+    //   },
+    //   sortable: false,
+    //   disableColumnMenu: true
+    // },
+    // {
+    //   field: 'otFixedAPR',
+    //   headerName: 'Fixed APR',
+    //   minWidth: depositColumns.fixedAPR.minWidth,
+    //   flex: 1,
+    //   renderCell: (params: GridRenderCellParams<BigNumber>) => {
+    //     return <FixedAPR params={params} />;
+    //   },
+    //   sortable: false,
+    //   disableColumnMenu: true
+    // },
+    // {
+    //   field: 'endDate',
+    //   headerName: 'Term',
+    //   minWidth: depositColumns.term.minWidth,
+    //   flex: 1,
+    //   renderCell: (params: GridRenderCellParams<string>) => {
+    //     return <Term params={params} theme={theme} />;
+    //   },
+    //   sortable: false,
+    //   disableColumnMenu: true
+    // }
   ];
 };

@@ -10,12 +10,10 @@ export interface StoreModel {
   shouldUpdate: boolean;
   shouldUpdateDepositCard: any;
   currentToken: 'DAI' | 'USDT' | 'USDC';
-  showContractBanner: boolean;
 
   // actions
   setTheme: Action<StoreModel, PaletteMode>;
   setShouldUpdate: Action<StoreModel, boolean>;
   setShouldUpdateDepositCard: Action<StoreModel, any>;
   setCurrentToken: Action<StoreModel, string>;
-  setShowContractBanner: Action<StoreModel, boolean>;
 }

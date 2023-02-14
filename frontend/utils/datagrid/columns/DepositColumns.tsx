@@ -23,7 +23,7 @@ export function Stream({ params, theme, minWidth, loading = false, cellPadding =
 
   return (
     <Grid container item xs justifyContent="space-between" alignItems="center" {...cellSx}>
-      <Grid item xs={3}>
+      {/* <Grid item xs={3}>
         {loading ? (
           <SkeletonLoader variant="circular">
             <Avatar />
@@ -31,7 +31,7 @@ export function Stream({ params, theme, minWidth, loading = false, cellPadding =
         ) : (
           <Avatar alt="Currency Logo" src={getCurrencyPath(params?.value)} />
         )}
-      </Grid>
+      </Grid> */}
       <Grid container item xs={8} direction="column" rowSpacing={3}>
         <Grid container item direction="column">
           {loading ? (
@@ -46,7 +46,7 @@ export function Stream({ params, theme, minWidth, loading = false, cellPadding =
           ) : (
             <>
               <Grid item>{params?.value}</Grid>
-              <Grid item>{`${params?.row?.protocol} ${params?.row?.vault}`}</Grid>
+              <Grid item>{`${params?.row?.name} ${params?.row?.chain_name}`}</Grid>
             </>
           )}
         </Grid>
@@ -54,7 +54,7 @@ export function Stream({ params, theme, minWidth, loading = false, cellPadding =
           {loading ? (
             <SkeletonLoader />
           ) : (
-            <ProgressBar variant="determinate" value={params?.row?.percentComplete} theme={theme} />
+            <ProgressBar variant="determinate" value={10} theme={theme} />
           )}
         </Grid>
       </Grid>
@@ -68,16 +68,7 @@ export function UnrealTVL({ params, minWidth, loading = false, cellPadding = 1.2
       <SkeletonLoader width="80%" />
     </Grid>
   ) : (
-    <>{`$ ${intlFormatNumber(
-      bnum(
-        typeof params?.value === 'number'
-          ? params?.value
-          : ethers.utils.formatUnits(params?.value ? params?.value : 0, params?.row?.underlyingDecimals)
-      )
-        .dp(3, 1)
-        .toString(),
-      3
-    )}`}</>
+    <>{`$ ${params?.totalLiquidity}`}</>
   );
 }
 
@@ -87,15 +78,7 @@ export function VaultAPY({ params, minWidth, loading = false, cellPadding = 1.25
       <SkeletonLoader width="80%" />
     </Grid>
   ) : (
-    <>{`${intlFormatNumber(
-      bnum(
-        typeof params?.value === 'number' ? params?.value : ethers.utils.formatEther(params?.value ? params?.value : 0)
-      )
-        .dp(3, 1)
-        .multipliedBy(100)
-        .toString(),
-      3
-    )} %`}</>
+    <>{`${params?.liquidityRate} %`}</>
   );
 }
 

@@ -15,7 +15,7 @@ import { useGetAaveAPY, useGetCompoundAPY } from 'hooks/useApyGql';
 // utils
 import { depositDatagridRowHeight, getDepositDatagridColumns } from 'utils/datagrid';
 import { constantStrings } from 'utils/constants';
-import { calculateAaveAPY, calculateCompoundAPY, escapeRegExp, getDepositCardData, getSimplePrice } from 'utils';
+import { calculateAaveAPY, calculateCompoundAPY, escapeRegExp, getDepositCardData, getSimplePrice, getAaveData } from 'utils';
 import { getYearnAPY } from 'utils/getYearnAPY';
 import { contract } from 'utils/contracts';
 import { CurrencyId, Protocol } from 'enums';
@@ -26,7 +26,6 @@ import SearchBar from 'components/Common/SearchBar';
 import DepositCardLoader from 'components/Deposits/DepositCardLoader';
 import DepositCardModal from 'components/Modal/DepositCardModal';
 import CustomNoRowsOverlay from 'components/Common/CustomNoRowsOverlay';
-import { bannerHeight } from 'components/Common/Banner';
 
 const getHoverBackgroundColor = (theme: Theme) =>
   theme.palette.mode === 'dark'
@@ -57,11 +56,9 @@ forOwn(contract.vaults.yearn, (value, key) => {
 });
 
 export default function DepositCardStack() {
-  const { shouldUpdateDepositCard, showContractBanner } = useStoreState((state) => state);
+  const { shouldUpdateDepositCard } = useStoreState((state) => state);
   const { setShouldUpdateDepositCard } = useStoreActions((action) => action);
   const theme: Theme = useTheme();
-
-  const depositDatagridContainerHeight = `calc(100vh - ${350 + (showContractBanner ? bannerHeight : 0)}px)`;
 
   const [queryString, setQueryString] = useState<string>('');
   const [selected, setSelected] = useState<number>(0);
@@ -70,7 +67,9 @@ export default function DepositCardStack() {
   const [transitionDirection, setTransitionDirection] = useState<any>('left');
   const [rowData, setRowData] = useState<IObject[]>([]);
   const [rate, setRate] = useState<IObject>();
+  const [aaveData, setAaveData] = useState<IObject[]>();
   const [priceRateLoading, setPriceRateLoading] = useState<boolean>(false);
+  const [AaveDataLoading, setAaveDataLoading] = useState<boolean>(false);
   const [showDepositCardModal, setShowDepositCardModal] = useState<boolean>(false);
   const [underlyingTokenSymbol, setUnderlyingTokenSymbol] = useState<string>('');
   const [otSymbol, setOtSymbol] = useState<string>('');
@@ -196,6 +195,31 @@ export default function DepositCardStack() {
   }, []);
 
   useEffect(() => {
+    let active = true;
+
+    const fetchAaveData = async () => {
+      setAaveDataLoading(false);
+
+      try {
+        const apiData = await getAaveData();
+        if (!active) {
+          return;
+        }
+        setAaveData(apiData);
+      } finally {
+        setAaveDataLoading(true);
+      }
+    };
+
+    fetchAaveData();
+    // Clean the state when the component is unmounted
+    return () => {
+      active = false;
+      setAaveData(null);
+    };
+  }, []);
+
+  useEffect(() => {
     if (shouldUpdateDepositCard?.shouldUpdate) {
       refetchAllActiveStreams({
         protocolFilter: selectedFilter
@@ -210,105 +234,22 @@ export default function DepositCardStack() {
   }, [shouldUpdateDepositCard]);
 
   useEffect(() => {
-    // TODO: Fix this vault apy issue
-    const notSignedInOrUnsupportedNetwork = // networkStatusAaveAPY === NetworkStatus.ready &&
-      //   networkStatusCompoundAPY === NetworkStatus.ready &&
-      yearnAllLoading;
-
-    if (
-      networkStatusAllActiveStreams === NetworkStatus.ready &&
-      networkStatusPoolStats === NetworkStatus.ready &&
-      notSignedInOrUnsupportedNetwork &&
-      priceRateLoading
-    ) {
-      const balancerPools: IObject = {};
-      const aaveAPYData: IObject = {};
-      const compoundAPYData: IObject = {};
-      const yearnAPYData: IObject = {};
-
-      // * set all of the pool ids
-      forEach(dataPoolStats?.pools, (pool: any) => {
-        balancerPools[pool?.id] = pool;
-      });
-
-      const dataAllActiveStreamsFiltered = filter(
-        dataAllActiveStreams?.streams,
-        (stream: any) => kovanPoolData[stream?.currentEpoch?.address.toLowerCase()]
-      );
-
-      forEach(dataAaveAPY?.reserves, (token: any) => {
-        const vaultApy = calculateAaveAPY(token?.liquidityRate);
-        aaveAPYData[token?.underlyingAsset.toLowerCase()] = vaultApy;
-      });
-
-      forEach(dataCompoundAPY?.markets, (token: any) => {
-        const vaultApy = calculateCompoundAPY(token?.supplyRate);
-        compoundAPYData[token?.underlyingAddress.toLowerCase()] = vaultApy;
-      });
-
-      forEach(yearnAllData, (token: any) => {
-        yearnAPYData[token?.token?.address.toLowerCase()] = token?.apy?.net_apy;
-      });
-
-      getDepositCardData({
-        balancerPools,
-        dataAllActiveStreams: dataAllActiveStreamsFiltered,
-        aaveAPYData,
-        compoundAPYData,
-        yearnAPYData,
-        kovanPoolData,
-        rate
-      })
-        .then((depositCardData: any) => {
-          setRowData((prevRowData: IObject[]) => {
-            if (prevRowData && prevRowData.length) {
-              const prevRowObject = prevRowData.find(
-                (item: IObject) =>
-                  shouldUpdateDepositCard?.underlyingAddress?.toLowerCase() === item?.underlying?.toLowerCase()
-              );
-              const rowObject = depositCardData.find(
-                (item: any) =>
-                  shouldUpdateDepositCard?.underlyingAddress?.toLowerCase() === item?.underlying?.toLowerCase()
-              );
-              if (prevRowObject && prevRowObject?.tvl !== rowObject?.tvl) {
-                stopPollingAllActiveStreams();
-                setShouldUpdateDepositCard({
-                  shouldUpdate: false,
-                  underlyingAddress: null
-                });
-              }
-            } else if (!selectedFilter) {
-              setListItems((prevListItems) => {
-                // ? Get the first item since it will be "All Protocols"
-                const firstItem = prevListItems.slice(0, 1);
-                // ? Return the list containing the protocols retrieved from Graph
-                return firstItem.concat(
-                  depositCardData.map((rowObject: IObject) => ({
-                    label: Protocol[rowObject?.protocol],
-                    value: rowObject?.protocol
-                  }))
-                );
-              });
-            }
-
-            return depositCardData;
-          });
-        })
-        .catch((error) => {
-          console.error('Error from get deposit card data', error);
-        })
-        .finally(() => {
-          setLoading(false);
+    getDepositCardData({
+      aaveData
+    })
+      .then((depositCardData: any) => {
+        setRowData((prevRowData: IObject[]) => {
+          return depositCardData;
         });
-    }
+      })
+      .catch((error) => {
+        console.error('Error from get deposit card data', error);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   }, [
-    networkStatusAllActiveStreams,
-    networkStatusPoolStats,
-    // TODO: Fix this vault apy issue
-    // networkStatusAaveAPY,
-    // networkStatusCompoundAPY,
-    dataAllActiveStreams,
-    yearnAllLoading,
+    AaveDataLoading,
     priceRateLoading
   ]);
 
@@ -416,7 +357,7 @@ export default function DepositCardStack() {
       <Slide direction={transitionDirection} in={toggleTransition} timeout={150} mountOnEnter unmountOnExit>
         <Box
           sx={{
-            height: depositDatagridContainerHeight,
+            height: '650px',
             '& .unreal-app-theme--table-card': {
               marginBottom: theme.typography.pxToRem(2),
               bgcolor: theme.unreal.card.backgroundColor,

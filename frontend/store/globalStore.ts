@@ -10,7 +10,6 @@ const globalStore: StoreModel = {
   shouldUpdate: false,
   shouldUpdateDepositCard: { shouldUpdate: false, underlyingAddress: null },
   currentToken: 'DAI',
-  showContractBanner: false,
 
   // actions
   setTheme: action((state, payload: PaletteMode) => {
@@ -28,10 +27,6 @@ const globalStore: StoreModel = {
   setCurrentToken: action((state, payload: 'DAI' | 'USDT' | 'USDC') => {
     state.currentToken = payload;
   }),
-
-  setShowContractBanner: action((state, payload: boolean) => {
-    state.showContractBanner = payload;
-  })
 };
 
 export default globalStore;

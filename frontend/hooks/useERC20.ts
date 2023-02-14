@@ -1,4 +1,5 @@
 import { ethers } from 'ethers';
+import core from './contracts/core';
 import { useWeb3React } from '@web3-react/core';
 import { Web3Provider } from '@ethersproject/providers';
 import { useNetwork, useSigner } from './ethereum';
