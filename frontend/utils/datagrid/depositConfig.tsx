@@ -47,7 +47,7 @@ export const getDepositDatagridColumns = (theme: Theme): GridColumns => {
   return [
     {
       field: 'name',
-      headerName: 'Stream',
+      headerName: 'Vault',
       headerClassName: 'MuiDataGrid-columnHeader--stream',
       cellClassName: 'MuiDataGrid-cell--stream',
       minWidth: depositColumns.stream.minWidth,
@@ -60,7 +60,7 @@ export const getDepositDatagridColumns = (theme: Theme): GridColumns => {
     },
     {
       field: 'tvl',
-      headerName: 'Unreal TVL',
+      headerName: 'Total Liquidity',
       minWidth: depositColumns.unrealTVL.minWidth,
       flex: 1,
       renderCell: (params: GridRenderCellParams<ethers.BigNumber>) => {

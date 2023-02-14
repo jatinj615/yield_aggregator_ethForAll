@@ -29,7 +29,7 @@ import { Circle as CircleIcon, DarkMode as DarkModeIcon, LightMode as LightModeI
 import { useStoreActions, useStoreState } from 'store/globalStore';
 import { ethers } from 'ethers';
 import { NetworkName } from 'enums';
-import { SUPPORTED_NETWORK } from 'constants/networkNames';
+import { SUPPORTED_NETWORKS } from 'constants/networkNames';
 import { setItem, intlFormatNumber } from 'utils';
 
 const PageBackgroundIconWrapperComponent = styled('div')({
@@ -125,7 +125,7 @@ export default function Structure({ children }: any) {
       {/* html head tag */}
       <Head>
         {/* favicon for the app */}
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/png/currencies/ethereum-eth-logo.png" />
       </Head>
 
       {/* override the global css */}
@@ -166,7 +166,7 @@ export default function Structure({ children }: any) {
                     sx={{ borderRadius: theme.typography.pxToRem(5) }}
                     label={network && network === NetworkName.MAINNET ? 'mainnet' : network || NetworkName.GOERLI}
                     variant="outlined"
-                    color={network && network !== SUPPORTED_NETWORK ? 'error' : 'default'}
+                    color={network ? 'error' : 'default'}
                   />
                   <Tooltip title="Wallet Connection Settings">
                     <Chip
@@ -178,7 +178,7 @@ export default function Structure({ children }: any) {
                           sx={{
                             '&.MuiChip-icon': {
                               color:
-                                network && network !== SUPPORTED_NETWORK
+                                network
                                   ? theme.palette.error.light
                                   : theme.palette.success.light,
                               fontSize: '0.6rem'

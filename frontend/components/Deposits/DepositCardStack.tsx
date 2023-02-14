@@ -212,7 +212,7 @@ export default function DepositCardStack() {
       <Slide direction={transitionDirection} in={toggleTransition} timeout={150} mountOnEnter unmountOnExit>
         <Box
           sx={{
-            height: '650px',
+            height: '900px',
             '& .unreal-app-theme--table-card': {
               marginBottom: theme.typography.pxToRem(2),
               bgcolor: theme.unreal.card.backgroundColor,

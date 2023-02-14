@@ -30,7 +30,7 @@ import { constantStrings } from 'utils/constants';
 import { bnum, ZERO } from 'utils/poolCalc/utils/bignumber';
 import { useWeb3React } from '@web3-react/core';
 import { Web3Provider } from '@ethersproject/providers';
-import { SUPPORTED_NETWORK } from 'constants/networkNames';
+import { SUPPORTED_NETWORKS } from 'constants/networkNames';
 import { getCurrencyPath } from 'constants/currencyPaths';
 import { ToastContext } from 'context/toastContext';
 
@@ -316,7 +316,7 @@ export default function DepositCardModal({
     if (!active) {
       return 'No wallet connected';
     }
-    if (loading && network === SUPPORTED_NETWORK) {
+    if (loading && network in SUPPORTED_NETWORKS) {
       return (
         <Grid container item wrap="nowrap" columnGap={1}>
           <SkeletonLoader width={50} /> {underlyingSymbol}
@@ -352,7 +352,7 @@ export default function DepositCardModal({
         parseFloat(amount) === 0 ||
         approvalPending ||
         txPending ||
-        network !== SUPPORTED_NETWORK
+        !(network in SUPPORTED_NETWORKS)
       );
     }
   };
@@ -360,7 +360,7 @@ export default function DepositCardModal({
   const isSliderDisabled = () => {
     return (
       bnum(ethers.utils.formatUnits(balance, underlyingDecimals)).lte(ZERO) ||
-      !(active && network === SUPPORTED_NETWORK) ||
+      !(active && network in SUPPORTED_NETWORKS) ||
       loading
     );
   };
@@ -410,7 +410,7 @@ export default function DepositCardModal({
         <MaxInput
           id="deposit-amount"
           value={amount}
-          disabled={!(active && network === SUPPORTED_NETWORK) || loading}
+          disabled={!(active && network in SUPPORTED_NETWORKS) || loading}
           error={amountError}
           errorMessage={`Not enough ${underlyingSymbol} or invalid amount`}
           placeholder="Enter amount"

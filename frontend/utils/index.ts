@@ -1,4 +1,4 @@
-import { SUPPORTED_NETWORK } from 'constants/networkNames';
+import { SUPPORTED_NETWORKS } from 'constants/networkNames';
 
 const ETHERSCAN_PREFIXES = {
   homestead: '',
@@ -13,7 +13,7 @@ export enum ExplorerDataType {
 }
 
 export function getExplorerLink(data: string, type: ExplorerDataType): string {
-  const prefix = `https://${ETHERSCAN_PREFIXES[SUPPORTED_NETWORK]}etherscan.io`;
+  const prefix = `https://${ETHERSCAN_PREFIXES[SUPPORTED_NETWORKS[0]]}etherscan.io`;
 
   switch (type) {
     case ExplorerDataType.TRANSACTION: {

@@ -3,7 +3,7 @@ import core from './contracts/core';
 import { useWeb3React } from '@web3-react/core';
 import { Web3Provider } from '@ethersproject/providers';
 import { useNetwork, useSigner } from './ethereum';
-import { SUPPORTED_NETWORK } from 'constants/networkNames';
+import { SUPPORTED_NETWORKS } from 'constants/networkNames';
 
 const useERC20 = () => {
   const { account, active, library } = useWeb3React<Web3Provider>();
@@ -27,7 +27,7 @@ const useERC20 = () => {
     let getTotalSupply: () => ethers.BigNumber | Promise<ethers.BigNumber> = () => ethers.constants.Zero;
     let approve;
 
-    if (active && network === SUPPORTED_NETWORK) {
+    if (active && network in SUPPORTED_NETWORKS) {
       const UnderlyingContract = new ethers.Contract(underlyingAddress, ERC20abi, signer);
 
       symbol = (): Promise<string> => {

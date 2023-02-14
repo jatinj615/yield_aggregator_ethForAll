@@ -22,7 +22,7 @@ import getDesignTokens from '@app-theme';
 import { getEthereumProviderLibrary, getItem } from 'utils';
 import { showRedirectNetworkToast, showUnsupportedNetworkToast } from 'utils/showToast';
 import { ToastContext } from 'context/toastContext';
-import { APP_REDIRECT_NETWORK, SUPPORTED_NETWORK } from 'constants/networkNames';
+import { APP_REDIRECT_NETWORK, SUPPORTED_NETWORKS } from 'constants/networkNames';
 import { useNetwork } from 'hooks/ethereum';
 
 import StructureComponent from 'components/Structure/Structure';
@@ -38,7 +38,8 @@ function InnerUnrealApp({ Component, pageProps }: AppProps) {
   const theme = useMemo(() => createTheme(getDesignTokens(mode)), [mode]);
 
   useEffect(() => {
-    if (network && network !== SUPPORTED_NETWORK) {
+    console.log(network)
+    if (network && !(network in SUPPORTED_NETWORKS)) {
       showUnsupportedNetworkToast(setToastData);
       if (network === APP_REDIRECT_NETWORK) {
         showRedirectNetworkToast(setToastData);

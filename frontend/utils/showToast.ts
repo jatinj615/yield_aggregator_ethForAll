@@ -3,13 +3,13 @@ import { v4 as uuidv4 } from 'uuid';
 import { ToastContextInterface, ToastDataInterface } from 'context/toastContext';
 import toast from 'react-hot-toast';
 import { isUndefined } from 'lodash-es';
-import { APP_REDIRECT_NETWORK, ChainNameFromNetworkName, SUPPORTED_NETWORK } from 'constants/networkNames';
+import { APP_REDIRECT_NETWORK, ChainNameFromNetworkName, SUPPORTED_NETWORKS } from 'constants/networkNames';
 
 // Unsupported network error message
 export const showUnsupportedNetworkToast = (setToastData: ToastContextInterface['setToastData']): void => {
   // * toast message
   const id = uuidv4();
-
+  console.log(setToastData)
   if (!isUndefined(setToastData)) {
     setToastData((prevContext) => {
       // object that we want to update
@@ -28,7 +28,7 @@ export const showUnsupportedNetworkToast = (setToastData: ToastContextInterface[
   }
 
   toast.error(
-    `Your wallet is connected to the wrong network. Please switch your network to ${ChainNameFromNetworkName[SUPPORTED_NETWORK]}`,
+    `Your wallet is connected to the wrong network. Please switch your network to ${ChainNameFromNetworkName[SUPPORTED_NETWORKS[0]]}`,
     { id }
   );
 };
