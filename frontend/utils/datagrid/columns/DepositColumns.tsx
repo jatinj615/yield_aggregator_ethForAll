@@ -68,7 +68,7 @@ export function UnrealTVL({ params, minWidth, loading = false, cellPadding = 1.2
       <SkeletonLoader width="80%" />
     </Grid>
   ) : (
-    <>{`$ ${params?.totalLiquidity}`}</>
+    <>{`$ ${params?.row?.totalLiquidity}`}</>
   );
 }
 
@@ -78,7 +78,7 @@ export function VaultAPY({ params, minWidth, loading = false, cellPadding = 1.25
       <SkeletonLoader width="80%" />
     </Grid>
   ) : (
-    <>{`${params?.liquidityRate} %`}</>
+    <>{`${params?.row?.yield_percentage} %`}</>
   );
 }
 

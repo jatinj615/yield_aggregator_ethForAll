@@ -44,6 +44,7 @@ const createMintRowObject = (row) => {
   mintRowObject.chain_name = row.chain_name;
   mintRowObject.underlyingAddress = row.underlyingAsset;
   mintRowObject.id = row.aToken.id;
+  mintRowObject.yield_percentage = row.yield_percentage;
 
   return mintRowObject;
 };
