@@ -192,11 +192,11 @@ export default function DepositCardModal({
         : 0;
       setAmount(e.target.value);
       setAmountPercentage(newValue);
-      setotytAmountLoading(true);
+      // setotytAmountLoading(true);
       if (isIncorrectNumberFormat(e.target.value)) {
         setAmountError(true);
         // getOTYTCountDebounced.cancel();
-        setotytAmountLoading(false);
+        // setotytAmountLoading(false);
       } else {
         const newB = parseFloat(ethers.utils.formatUnits(balance, underlyingDecimals));
         const newI = parseFloat(e.target.value);
@@ -205,7 +205,7 @@ export default function DepositCardModal({
           // getOTYTCountDebounced.cancel();
           // setotAmount('');
           // setytAmount('');
-          setotytAmountLoading(false);
+          // setotytAmountLoading(false);
         } else {
           setAmountError(false);
           // getOTYTCountDebounced.cancel();
@@ -217,7 +217,7 @@ export default function DepositCardModal({
       setAmountPercentage(0);
       setAmountError(false);
       // getOTYTCountDebounced.cancel();
-      setotytAmountLoading(false);
+      // setotytAmountLoading(false);
     }
   };
 
@@ -227,7 +227,7 @@ export default function DepositCardModal({
     setAmount(maxAmount);
     setAmountPercentage(balanceFormatted.gt(ZERO) ? 100 : 0);
     setAmountError(false);
-    setotytAmountLoading(true);
+    // setotytAmountLoading(true);
     // getOTYTCountDebounced.cancel();
     // await getOTYTCountDebounced(getOTYTCount, ethers.utils.parseEther(maxAmount));
   };
@@ -267,7 +267,7 @@ export default function DepositCardModal({
     setAmountPercentage(newValue as number);
     setAmount(amount);
     setAmountError(false);
-    setotytAmountLoading(true);
+    // setotytAmountLoading(true);
     // getOTYTCountDebounced.cancel();
     // await getOTYTCountDebounced(getOTYTCount, ethers.utils.parseEther(amount));
   };
@@ -284,6 +284,7 @@ export default function DepositCardModal({
       if (underlyingToken?.approve && loading) {
         try {
           const symbol = await underlyingToken.symbol();
+          console.log("symbol", symbol);
           setUnderlyingSymbol(symbol);
 
           const balance = await underlyingToken.getBalance();

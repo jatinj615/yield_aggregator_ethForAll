@@ -36,7 +36,6 @@ export const getDepositCardData = ({
  */
 const createMintRowObject = (row) => {
   const mintRowObject: IObject = {};
-  console.log(row)
   mintRowObject.name = row.name;
   mintRowObject.symbol = row.name;
   mintRowObject.totalLiquidity = row.totalLiquidity;
