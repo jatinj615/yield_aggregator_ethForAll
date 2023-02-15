@@ -6,11 +6,15 @@ import { useStoreActions } from 'store/globalStore';
 import { useContext } from 'react';
 import { SUPPORTED_NETWORKS } from 'constants/networkNames';
 import { ToastContext, ToastDataInterface } from 'context/toastContext';
+import toast from 'react-hot-toast';
+import { v4 as uuidv4 } from 'uuid';
 import "utils/multiChainConstants";
 import { registries, connextDomain, ConnextWeth } from '../utils/multiChainConstants';
 import registry from './contracts/registry';
 import {BigNumber} from 'ethers';
 import { Registry } from '../../solidity/typechain/contracts/Registry';
+import { isUndefined } from 'lodash-es';
+import { ExplorerDataType, getExplorerLink } from 'utils';
 
 const useRegistry = () => {
     const { setShouldUpdate } = useStoreActions((action) => action);
@@ -37,26 +41,85 @@ const useRegistry = () => {
         vaultAddress: string,
         routeId: BigNumber,
     ) => {
-        const registryContract = getRegistryContract();
-        const bridgeRequest: Registry.BridgeRequestStruct = {
-            destinationDomain: connextDomain[destinationChainId],
-            relayerFee: relayerFee,
-            slippage: slippage,
-            asset: underlying
-        } 
-        const payload: Registry.VaultRequestStruct = {
-            routeId: routeId,
-            amount: amount,
-            vaultAddress: vaultAddress,
-            underlying: underlying,
-            receiverAddress: await signer.getAddress(),
-            bridgeRequest: bridgeRequest
+        try {
+            const registryContract = getRegistryContract();
+            const bridgeRequest: Registry.BridgeRequestStruct = {
+                destinationDomain: connextDomain[destinationChainId],
+                relayerFee: relayerFee,
+                slippage: slippage,
+                asset: underlying
+            } 
+            const payload: Registry.VaultRequestStruct = {
+                routeId: routeId,
+                amount: amount,
+                vaultAddress: vaultAddress,
+                underlying: underlying,
+                receiverAddress: await signer.getAddress(),
+                bridgeRequest: bridgeRequest
+            }
+            const tx = await registryContract.connect(signer).userDepositRequest(payload);
+
+            const { hash } = tx;
+
+            // * toast message
+            let id = uuidv4();
+
+            if (!isUndefined(setToastData)) {
+                setToastData((prevContext) => {
+                return {
+                    // object that we want to update
+                    ...(prevContext || {}), // keep all other key-value pairs
+                    [id]: {
+                    primaryButtonType: 'ANCHOR',
+                    linkType: 'EXTERNAL',
+                    primaryButtonText: 'VIEW ON ETHERSCAN',
+                    link: `${getExplorerLink(hash, ExplorerDataType.TRANSACTION, chainId)}`
+                    }
+                } as ToastDataInterface;
+                });
+            }
+
+            await toast.promise(
+                tx.wait(),
+                {
+                loading: 'Transaction Pending...',
+                success: 'Transaction Completed',
+                error: 'Transaction Failed'
+                },
+                { id }
+            );
+
+            // * toast message
+            id = uuidv4();
+
+            if (!isUndefined(setToastData)) {
+                setToastData((prevContext) => {
+                // object that we want to update
+                return {
+                    // keep all other key-value pairs
+                    ...(prevContext || {}),
+                    [id]: {
+                    title: 'Subscription Confirmed',
+                    severity: 'success',
+                    primaryButtonType: 'BUTTON',
+                    primaryButtonText: 'DISMISS',
+                    buttonActionType: 'DISMISS'
+                    }
+                } as ToastDataInterface;
+                });
+            }
+
+            toast.success('You can also add Ownership token and Yield Token to your wallet', { id });
+        } catch (err) {
+            toast.error('An Error Occurred');
+            console.log(err);
+            throw new Error(err.message);
         }
-        const tx = await registryContract.connect(signer).userDepositRequest(payload);
     }
 
     return {
-        userDepositRequest
+        userDepositRequest,
+        getRegistryContract
     }
 
 }

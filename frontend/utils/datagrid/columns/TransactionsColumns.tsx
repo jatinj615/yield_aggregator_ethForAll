@@ -29,8 +29,9 @@ export function Action({
       </Grid>
     );
   }
-
-  const link = `${getExplorerLink(params?.row?.tx, ExplorerDataType.TRANSACTION)}`;
+  // TODO: check here if for transaction link
+  // const link = `${getExplorerLink(params?.row?.tx, ExplorerDataType.TRANSACTION, 5)}`;
+  const link = "";
 
   return (
     <Link href={link} passHref>

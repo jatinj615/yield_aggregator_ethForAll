@@ -45,3 +45,10 @@ export const ConnextWeth: { [key: number]: string} = {
     80001: "0xFD2AB41e083c75085807c4A65C0A14FDD93d55A9",
     421613: "0x1346786E6A5e07b90184a1Ba58E55444b99DC4A2"
 }
+
+export const explorers: { [key: number]: string} = {
+    5: "goerli.etherscan.io",
+    420: "optimistic.etherscan.io",
+    80001: "mumbai.polygonscan.com",
+    421613: "arbiscan.io"
+}

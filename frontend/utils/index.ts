@@ -1,4 +1,5 @@
 import { SUPPORTED_NETWORKS } from 'constants/networkNames';
+import {explorers} from './multiChainConstants';
 
 const ETHERSCAN_PREFIXES = {
   homestead: '',
@@ -12,8 +13,8 @@ export enum ExplorerDataType {
   BLOCK = 'block'
 }
 
-export function getExplorerLink(data: string, type: ExplorerDataType): string {
-  const prefix = `https://${ETHERSCAN_PREFIXES[SUPPORTED_NETWORKS[0]]}etherscan.io`;
+export function getExplorerLink(data: string, type: ExplorerDataType, chainId: number): string {
+  const prefix = `https://${explorers[chainId]}`;
 
   switch (type) {
     case ExplorerDataType.TRANSACTION: {

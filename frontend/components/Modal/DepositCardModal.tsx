@@ -21,7 +21,7 @@ import MaxInput from 'components/Common/Maxinput';
 import ApprovalCard from 'components/Common/ApprovalCard';
 import Loader from 'components/Common/Loader';
 import SkeletonLoader from 'components/Common/SkeletonLoader';
-
+import useRegistry from 'hooks/useRegistry';
 import { useStoreActions } from 'store/globalStore';
 import useERC20 from 'hooks/useERC20';
 import { useNetwork } from 'hooks/ethereum';
@@ -126,6 +126,7 @@ export default function DepositCardModal({
   underlying = ConnextWeth[connectedChainId]
   const erc20 = useERC20();
   const underlyingToken = useMemo(() => erc20(underlying), [erc20, underlying]);
+  const {userDepositRequest, getRegistryContract} = useRegistry()
   const [amountError, setAmountError] = useState<boolean>(false);
   const [txPending, setTxPending] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
@@ -143,7 +144,7 @@ export default function DepositCardModal({
   };
 
   const approvalMessage = useMemo(
-    () => `You need to grant Unreal approval to spend your ${underlyingSymbol} in order to perform this transaction.`,
+    () => `You need to grant approval to spend your ${underlyingSymbol} in order to perform this transaction.`,
     [underlyingSymbol]
   );
 
@@ -158,6 +159,8 @@ export default function DepositCardModal({
       const amountToSubscribe = ethers.utils.parseUnits(amount, underlyingDecimals);
 
       if (approvedLimit.gte(amountToSubscribe)) {
+        // TODO: add registry deposit tx
+        // await userDepositRequest(chainId, )
         // await mint(amountToSubscribe, otAddress, ytAddress, protocol, underlying, durationSeconds, otSymbol, ytSymbol);
 
         setAmount('');
@@ -285,7 +288,6 @@ export default function DepositCardModal({
       if (underlyingToken?.approve && loading) {
         try {
           const symbol = await underlyingToken.symbol();
-          console.log("symbol", symbol);
           setUnderlyingSymbol(symbol);
 
           const balance = await underlyingToken.getBalance();
