@@ -42,13 +42,13 @@ const useRegistry = () => {
             destinationDomain: connextDomain[destinationChainId],
             relayerFee: relayerFee,
             slippage: slippage,
-            asset: ConnextWeth[chainId]
+            asset: underlying
         } 
         const payload: Registry.VaultRequestStruct = {
             routeId: routeId,
             amount: amount,
             vaultAddress: vaultAddress,
-            underlying: ConnextWeth[chainId],
+            underlying: underlying,
             receiverAddress: await signer.getAddress(),
             bridgeRequest: bridgeRequest
         }

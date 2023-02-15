@@ -33,6 +33,7 @@ import { Web3Provider } from '@ethersproject/providers';
 import { SUPPORTED_NETWORKS } from 'constants/networkNames';
 import { getCurrencyPath } from 'constants/currencyPaths';
 import { ToastContext } from 'context/toastContext';
+import { ConnextWeth } from '../../utils/multiChainConstants';
 
 interface IDepositCardModalProps {
   showDialog: boolean;
@@ -110,10 +111,8 @@ export default function DepositCardModal({
   underlying,
   underlyingDecimals
 }: IDepositCardModalProps) {
-  const erc20 = useERC20();
-  const underlyingToken = useMemo(() => erc20(underlying), [erc20, underlying]);
-
-
+  
+  
   const { setShouldUpdateDepositCard } = useStoreActions((action) => action);
   const { setShowConnectWalletModal } = useContext(ToastContext);
   const {
@@ -123,12 +122,12 @@ export default function DepositCardModal({
     library
   } = useWeb3React<Web3Provider>();
   const network = useNetwork(library);
-
-  console.log(library._network.chainId);
+  underlying = ConnextWeth[library._network.chainId]
+  const erc20 = useERC20();
+  const underlyingToken = useMemo(() => erc20(underlying), [erc20, underlying]);
   const [amountError, setAmountError] = useState<boolean>(false);
   const [txPending, setTxPending] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
-  const [otytAmountLoading, setotytAmountLoading] = useState<boolean>(false);
   const [approvalPending, setApprovalPending] = useState<boolean>(false);
   const [isApproving, setIsApproving] = useState<boolean>(false);
   const [approvedLimit, setApprovedLimit] = useState<ethers.BigNumber>(ethers.constants.MaxUint256);
