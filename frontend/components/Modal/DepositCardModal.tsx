@@ -33,7 +33,7 @@ import { Web3Provider } from '@ethersproject/providers';
 import { SUPPORTED_NETWORKS } from 'constants/networkNames';
 import { getCurrencyPath } from 'constants/currencyPaths';
 import { ToastContext } from 'context/toastContext';
-import { ConnextWeth } from '../../utils/multiChainConstants';
+import { ConnextWeth, registries } from '../../utils/multiChainConstants';
 
 interface IDepositCardModalProps {
   showDialog: boolean;
@@ -122,7 +122,8 @@ export default function DepositCardModal({
     library
   } = useWeb3React<Web3Provider>();
   const network = useNetwork(library);
-  underlying = ConnextWeth[library._network.chainId]
+  const connectedChainId = library._network.chainId
+  underlying = ConnextWeth[connectedChainId]
   const erc20 = useERC20();
   const underlyingToken = useMemo(() => erc20(underlying), [erc20, underlying]);
   const [amountError, setAmountError] = useState<boolean>(false);
@@ -164,8 +165,8 @@ export default function DepositCardModal({
         setShouldUpdateDepositCard({ shouldUpdate: true, underlyingAddress: underlying });
         const balance = await underlyingToken.getBalance();
         setBalance(balance);
-        // const limit = await underlyingToken.getAllowance(core.address);
-        // setApprovedLimit(limit);
+        const limit = await underlyingToken.getAllowance(registries[library._network.chainId]);
+        setApprovedLimit(limit);
         setShowDialog(false);
       } else {
         setApprovalPending(true);
@@ -236,16 +237,16 @@ export default function DepositCardModal({
     setIsApproving(true);
 
     try {
-      // const tx = await underlyingToken.approve(ethers.constants.MaxUint256, core.address);
+      const tx = await underlyingToken.approve(ethers.constants.MaxUint256, registries[library._network.chainId]);
 
-      // await toast.promise(tx.wait(), {
-      //   loading: constantStrings.approvalPending,
-      //   success: constantStrings.approvalCompleted,
-      //   error: constantStrings.approvalFailed
-      // });
+      await toast.promise(tx.wait(), {
+        loading: constantStrings.approvalPending,
+        success: constantStrings.approvalCompleted,
+        error: constantStrings.approvalFailed
+      });
 
-      // const limit = await underlyingToken.getAllowance(core.address);
-      // setApprovedLimit(limit);
+      const limit = await underlyingToken.getAllowance(registries[library._network.chainId]);
+      setApprovedLimit(limit);
       setApprovalPending(false);
     } catch (error) {
       console.error('Error from deposit card approval', error);
@@ -289,9 +290,8 @@ export default function DepositCardModal({
 
           const balance = await underlyingToken.getBalance();
           setBalance(balance);
-
-          // const limit = await underlyingToken.getAllowance(core.address);
-          // setApprovedLimit(limit);
+          const limit = await underlyingToken.getAllowance(registries[library._network.chainId]);
+          setApprovedLimit(limit);
         } catch (error) {
           console.error('Error from deposit card modal ERC20 API', error);
         } finally {
@@ -304,10 +304,11 @@ export default function DepositCardModal({
   }, [underlyingToken, loading]);
 
   const getAvailableBalance = () => {
+    
     if (!active) {
       return 'No wallet connected';
     }
-    if (loading && network in SUPPORTED_NETWORKS) {
+    if (loading) {
       return (
         <Grid container item wrap="nowrap" columnGap={1}>
           <SkeletonLoader width={50} /> {underlyingSymbol}
@@ -315,8 +316,8 @@ export default function DepositCardModal({
       );
     } else {
       return `${intlFormatNumber(
-        bnum(ethers.utils.formatUnits(balance, underlyingDecimals)).dp(2, 1).toString(),
-        2
+        bnum(ethers.utils.formatUnits(balance, underlyingDecimals)).dp(4).toString(),
+        4
       )} ${underlyingSymbol}`;
     }
   };
@@ -342,8 +343,7 @@ export default function DepositCardModal({
         amount === '' ||
         parseFloat(amount) === 0 ||
         approvalPending ||
-        txPending ||
-        !(network in SUPPORTED_NETWORKS)
+        txPending 
       );
     }
   };
@@ -351,7 +351,7 @@ export default function DepositCardModal({
   const isSliderDisabled = () => {
     return (
       bnum(ethers.utils.formatUnits(balance, underlyingDecimals)).lte(ZERO) ||
-      !(active && network in SUPPORTED_NETWORKS) ||
+      !(active) ||
       loading
     );
   };
@@ -378,7 +378,7 @@ export default function DepositCardModal({
             </Grid>
             <Grid container spacing={1.5} item alignItems="center">
               <Grid item>
-                <Avatar alt="Currency Logo" src={getCurrencyPath(underlyingSymbol)} sx={{ width: 28, height: 28 }} />
+                <Avatar alt="Currency Logo" src='./png/currencies/ethereum-eth-logo.png' sx={{ width: 28, height: 28 }} />
               </Grid>
               <Grid item>
                 <Typography sx={{ fontWeight: theme.typography.fontWeightMedium }}>{underlyingSymbol}</Typography>
@@ -401,7 +401,7 @@ export default function DepositCardModal({
         <MaxInput
           id="deposit-amount"
           value={amount}
-          disabled={!(active && network in SUPPORTED_NETWORKS) || loading}
+          disabled={!active || loading}
           error={amountError}
           errorMessage={`Not enough ${underlyingSymbol} or invalid amount`}
           placeholder="Enter amount"
@@ -431,9 +431,9 @@ export default function DepositCardModal({
           loading={isApproving}
           customStyles={approvalPending ? { mt: 4 } : {}}
         />
-        <Typography sx={{ mt: 4, mb: 2 }} variant="subtitle2" gutterBottom component="div">
+        {/* <Typography sx={{ mt: 4, mb: 2 }} variant="subtitle2" gutterBottom component="div">
           {`Here's what you'll get`}
-        </Typography>
+        </Typography> */}
         {/* <Typography variant="h6" component="div">
           {otytAmountLoading ? (
             <Grid container item wrap="nowrap" columnGap={1}>
@@ -443,9 +443,9 @@ export default function DepositCardModal({
             `${otAmount ? otAmount : '-'} ${otSymbol}`
           )}
         </Typography> */}
-        <Typography variant="caption" display="block" gutterBottom>
+        {/* <Typography variant="caption" display="block" gutterBottom>
           OWNERSHIP TOKENS
-        </Typography>
+        </Typography> */}
         {/* <Typography variant="h6" component="div">
           {otytAmountLoading ? (
             <Grid container item wrap="nowrap" columnGap={1}>
@@ -455,9 +455,9 @@ export default function DepositCardModal({
             `${ytAmount ? ytAmount : '-'} ${ytSymbol}`
           )}
         </Typography> */}
-        <Typography variant="caption" display="block" gutterBottom>
+        {/* <Typography variant="caption" display="block" gutterBottom>
           YIELD TOKENS
-        </Typography>
+        </Typography> */}
         {/* <Typography sx={{ mt: 4 }} variant="caption" display="block" gutterBottom>
             You can use the principal and yield tokens to achieve lorem ipsum dolor sit amet and I’m typing some more
             text here to fill some empty space. That is it, no more text now. Learn More
