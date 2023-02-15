@@ -44,3 +44,4 @@ export const numberConstants: NumberConstants = {
   daysPerYear: 365,
   monthsPerYear: 12
 };
+

@@ -21,7 +21,7 @@ import MaxInput from 'components/Common/Maxinput';
 import ApprovalCard from 'components/Common/ApprovalCard';
 import Loader from 'components/Common/Loader';
 import SkeletonLoader from 'components/Common/SkeletonLoader';
-import registry from 'hooks/contracts/registry';
+
 import { useStoreActions } from 'store/globalStore';
 import useERC20 from 'hooks/useERC20';
 import { useNetwork } from 'hooks/ethereum';
@@ -112,6 +112,8 @@ export default function DepositCardModal({
 }: IDepositCardModalProps) {
   const erc20 = useERC20();
   const underlyingToken = useMemo(() => erc20(underlying), [erc20, underlying]);
+
+
   const { setShouldUpdateDepositCard } = useStoreActions((action) => action);
   const { setShowConnectWalletModal } = useContext(ToastContext);
   const {
@@ -122,6 +124,7 @@ export default function DepositCardModal({
   } = useWeb3React<Web3Provider>();
   const network = useNetwork(library);
 
+  console.log(library._network.chainId);
   const [amountError, setAmountError] = useState<boolean>(false);
   const [txPending, setTxPending] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
@@ -155,15 +158,15 @@ export default function DepositCardModal({
       const amountToSubscribe = ethers.utils.parseUnits(amount, underlyingDecimals);
 
       if (approvedLimit.gte(amountToSubscribe)) {
-        await mint(amountToSubscribe, otAddress, ytAddress, protocol, underlying, durationSeconds, otSymbol, ytSymbol);
+        // await mint(amountToSubscribe, otAddress, ytAddress, protocol, underlying, durationSeconds, otSymbol, ytSymbol);
 
         setAmount('');
         setAmountPercentage(0);
         setShouldUpdateDepositCard({ shouldUpdate: true, underlyingAddress: underlying });
         const balance = await underlyingToken.getBalance();
         setBalance(balance);
-        const limit = await underlyingToken.getAllowance(core.address);
-        setApprovedLimit(limit);
+        // const limit = await underlyingToken.getAllowance(core.address);
+        // setApprovedLimit(limit);
         setShowDialog(false);
       } else {
         setApprovalPending(true);
@@ -173,14 +176,14 @@ export default function DepositCardModal({
     }
   };
 
-  const getOTYTCountDebounced = useRef(
-    debounce(async (fn: Function, input: ethers.BigNumber) => {
-      const { ot, yt } = await fn(input);
-      setotAmount(intlFormatNumber(bnum(ethers.utils.formatEther(ot)).dp(6, 1).toString(), 6));
-      setytAmount(intlFormatNumber(bnum(ethers.utils.formatEther(yt)).dp(6, 1).toString(), 6));
-      setotytAmountLoading(false);
-    }, 500)
-  ).current;
+  // const getOTYTCountDebounced = useRef(
+  //   debounce(async (fn: Function, input: ethers.BigNumber) => {
+  //     const { ot, yt } = await fn(input);
+  //     setotAmount(intlFormatNumber(bnum(ethers.utils.formatEther(ot)).dp(6, 1).toString(), 6));
+  //     setytAmount(intlFormatNumber(bnum(ethers.utils.formatEther(yt)).dp(6, 1).toString(), 6));
+  //     setotytAmountLoading(false);
+  //   }, 500)
+  // ).current;
 
   const handleInput = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.value) {
@@ -193,28 +196,28 @@ export default function DepositCardModal({
       setotytAmountLoading(true);
       if (isIncorrectNumberFormat(e.target.value)) {
         setAmountError(true);
-        getOTYTCountDebounced.cancel();
+        // getOTYTCountDebounced.cancel();
         setotytAmountLoading(false);
       } else {
         const newB = parseFloat(ethers.utils.formatUnits(balance, underlyingDecimals));
         const newI = parseFloat(e.target.value);
         if (newI > newB) {
           setAmountError(true);
-          getOTYTCountDebounced.cancel();
-          setotAmount('');
-          setytAmount('');
+          // getOTYTCountDebounced.cancel();
+          // setotAmount('');
+          // setytAmount('');
           setotytAmountLoading(false);
         } else {
           setAmountError(false);
-          getOTYTCountDebounced.cancel();
-          await getOTYTCountDebounced(getOTYTCount, ethers.utils.parseEther(e.target.value));
+          // getOTYTCountDebounced.cancel();
+          // await getOTYTCountDebounced(getOTYTCount, ethers.utils.parseEther(e.target.value));
         }
       }
     } else {
       setAmount('');
       setAmountPercentage(0);
       setAmountError(false);
-      getOTYTCountDebounced.cancel();
+      // getOTYTCountDebounced.cancel();
       setotytAmountLoading(false);
     }
   };
@@ -226,24 +229,24 @@ export default function DepositCardModal({
     setAmountPercentage(balanceFormatted.gt(ZERO) ? 100 : 0);
     setAmountError(false);
     setotytAmountLoading(true);
-    getOTYTCountDebounced.cancel();
-    await getOTYTCountDebounced(getOTYTCount, ethers.utils.parseEther(maxAmount));
+    // getOTYTCountDebounced.cancel();
+    // await getOTYTCountDebounced(getOTYTCount, ethers.utils.parseEther(maxAmount));
   };
 
   const handleApprove = async () => {
     setIsApproving(true);
 
     try {
-      const tx = await underlyingToken.approve(ethers.constants.MaxUint256, core.address);
+      // const tx = await underlyingToken.approve(ethers.constants.MaxUint256, core.address);
 
-      await toast.promise(tx.wait(), {
-        loading: constantStrings.approvalPending,
-        success: constantStrings.approvalCompleted,
-        error: constantStrings.approvalFailed
-      });
+      // await toast.promise(tx.wait(), {
+      //   loading: constantStrings.approvalPending,
+      //   success: constantStrings.approvalCompleted,
+      //   error: constantStrings.approvalFailed
+      // });
 
-      const limit = await underlyingToken.getAllowance(core.address);
-      setApprovedLimit(limit);
+      // const limit = await underlyingToken.getAllowance(core.address);
+      // setApprovedLimit(limit);
       setApprovalPending(false);
     } catch (error) {
       console.error('Error from deposit card approval', error);
@@ -266,16 +269,16 @@ export default function DepositCardModal({
     setAmount(amount);
     setAmountError(false);
     setotytAmountLoading(true);
-    getOTYTCountDebounced.cancel();
-    await getOTYTCountDebounced(getOTYTCount, ethers.utils.parseEther(amount));
+    // getOTYTCountDebounced.cancel();
+    // await getOTYTCountDebounced(getOTYTCount, ethers.utils.parseEther(amount));
   };
 
-  useEffect(() => {
-    // Clean the state when the component is unmounted
-    return () => {
-      getOTYTCountDebounced.cancel();
-    };
-  }, [getOTYTCountDebounced]);
+  // useEffect(() => {
+  //   // Clean the state when the component is unmounted
+  //   return () => {
+  //     getOTYTCountDebounced.cancel();
+  //   };
+  // }, [getOTYTCountDebounced]);
 
   useEffect(() => {
     const fetch = async () => {
@@ -287,8 +290,8 @@ export default function DepositCardModal({
           const balance = await underlyingToken.getBalance();
           setBalance(balance);
 
-          const limit = await underlyingToken.getAllowance(core.address);
-          setApprovedLimit(limit);
+          // const limit = await underlyingToken.getAllowance(core.address);
+          // setApprovedLimit(limit);
         } catch (error) {
           console.error('Error from deposit card modal ERC20 API', error);
         } finally {
@@ -431,7 +434,7 @@ export default function DepositCardModal({
         <Typography sx={{ mt: 4, mb: 2 }} variant="subtitle2" gutterBottom component="div">
           {`Here's what you'll get`}
         </Typography>
-        <Typography variant="h6" component="div">
+        {/* <Typography variant="h6" component="div">
           {otytAmountLoading ? (
             <Grid container item wrap="nowrap" columnGap={1}>
               <SkeletonLoader width={85} /> {otSymbol}
@@ -439,11 +442,11 @@ export default function DepositCardModal({
           ) : (
             `${otAmount ? otAmount : '-'} ${otSymbol}`
           )}
-        </Typography>
+        </Typography> */}
         <Typography variant="caption" display="block" gutterBottom>
           OWNERSHIP TOKENS
         </Typography>
-        <Typography variant="h6" component="div">
+        {/* <Typography variant="h6" component="div">
           {otytAmountLoading ? (
             <Grid container item wrap="nowrap" columnGap={1}>
               <SkeletonLoader width={85} /> {ytSymbol}
@@ -451,7 +454,7 @@ export default function DepositCardModal({
           ) : (
             `${ytAmount ? ytAmount : '-'} ${ytSymbol}`
           )}
-        </Typography>
+        </Typography> */}
         <Typography variant="caption" display="block" gutterBottom>
           YIELD TOKENS
         </Typography>

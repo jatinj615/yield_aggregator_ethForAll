@@ -187,7 +187,6 @@ export default function DepositCardStack() {
   };
 
   const handleRowClick = (params, event, details) => {
-    console.log(params);
     setUnderlyingTokenSymbol(params?.row?.name);
     setUnderlying(params?.row?.underlyingAddress);
     setAToken(params?.row?.a_token);

@@ -26,7 +26,7 @@ const useERC20 = () => {
     let getTotalSupply: () => ethers.BigNumber | Promise<ethers.BigNumber> = () => ethers.constants.Zero;
     let approve;
 
-    if (active && network in SUPPORTED_NETWORKS) {
+    if (active) {
       const UnderlyingContract = new ethers.Contract(underlyingAddress, ERC20abi, signer);
 
       symbol = (): Promise<string> => {
