@@ -47,6 +47,12 @@ export default function DepositCardStack() {
   const [rowData, setRowData] = useState<IObject[]>([]);
   const [rate, setRate] = useState<IObject>();
   const [aaveData, setAaveData] = useState<IObject[]>();
+  const [underlyingTokenSymbol, setUnderlyingTokenSymbol] = useState<string>('');
+  const [aToken, setAToken] = useState<string>('');
+  const [chainId, setChainId] = useState<number>();
+  const [chainName, setChainName] = useState<string>();
+  const [vaultAddress, setVaultAddress] = useState<string>();
+  const [underlyingDecimals, setUnderlyingDecimals] = useState<number>(18);
   const [priceRateLoading, setPriceRateLoading] = useState<boolean>(false);
   const [AaveDataLoading, setAaveDataLoading] = useState<boolean>(false);
   const [showDepositCardModal, setShowDepositCardModal] = useState<boolean>(false);
@@ -172,32 +178,39 @@ export default function DepositCardStack() {
   };
 
   const resetDepositCardModal = () => {
+    setUnderlyingTokenSymbol('');
     setUnderlying('');
+    setChainId(0);
+    setChainName('');
+    setAToken('');
+    setVaultAddress('');
   };
 
   const handleRowClick = (params, event, details) => {
+    console.log(params);
+    setUnderlyingTokenSymbol(params?.row?.name);
+    setUnderlying(params?.row?.underlyingAddress);
+    setAToken(params?.row?.a_token);
+    setChainId(params?.row?.chain_id);
+    setChainName(params?.row?.chain_name);
+    setVaultAddress(params?.row?.pool);
     resetDepositCardModal();
+    setShowDepositCardModal(true);
   };
 
 
+  
   /* 
         {showDepositCardModal && (
         <DepositCardModal
           showDialog={showDepositCardModal}
           setShowDialog={handleShowDepositCardModal}
           underlyingTokenSymbol={underlyingTokenSymbol}
-          otSymbol={otSymbol}
-          ytSymbol={ytSymbol}
-          durationSeconds={durationSeconds}
-          protocol={protocol}
-          otAddress={otAddress}
-          ytAddress={ytAddress}
-          streamKey={streamKey}
+          vaultAddress={vaultAddress}
           underlying={underlying}
           underlyingDecimals={underlyingDecimals}
         />
   */
-
   return (
     <>
       <SearchBar
@@ -209,6 +222,19 @@ export default function DepositCardStack() {
       {/* <div className="mt-3 ml-10">
         <Tabs selectedValue={selected} onSelected={handleFilterChange} list={list} />
       </div> */}
+      {showDepositCardModal && (
+        <DepositCardModal
+          showDialog={showDepositCardModal}
+          setShowDialog={handleShowDepositCardModal}
+          underlyingTokenSymbol={underlyingTokenSymbol}
+          aToken={aToken}
+          chainId = {chainId}
+          chainName = {chainName}
+          vaultAddress={vaultAddress}
+          underlying={underlying}
+          underlyingDecimals={underlyingDecimals}
+        />
+      )}
       <Slide direction={transitionDirection} in={toggleTransition} timeout={150} mountOnEnter unmountOnExit>
         <Box
           sx={{

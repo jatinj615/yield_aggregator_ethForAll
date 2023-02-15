@@ -36,12 +36,15 @@ export const getDepositCardData = ({
  */
 const createMintRowObject = (row) => {
   const mintRowObject: IObject = {};
-
+  console.log(row)
   mintRowObject.name = row.name;
   mintRowObject.symbol = row.name;
   mintRowObject.totalLiquidity = row.totalLiquidity;
   mintRowObject.liquidityRate = row.liquidityRate;
   mintRowObject.chain_name = row.chain_name;
+  mintRowObject.chain_id = row.chain_id;
+  mintRowObject.a_token = row.aToken.id;
+  mintRowObject.pool = row.pool.pool;
   mintRowObject.underlyingAddress = row.underlyingAsset;
   mintRowObject.id = row.aToken.id;
   mintRowObject.yield_percentage = row.yield_percentage;

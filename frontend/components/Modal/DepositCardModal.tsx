@@ -21,7 +21,7 @@ import MaxInput from 'components/Common/Maxinput';
 import ApprovalCard from 'components/Common/ApprovalCard';
 import Loader from 'components/Common/Loader';
 import SkeletonLoader from 'components/Common/SkeletonLoader';
-
+import registry from 'hooks/contracts/registry';
 import { useStoreActions } from 'store/globalStore';
 import useERC20 from 'hooks/useERC20';
 import { useNetwork } from 'hooks/ethereum';
@@ -38,13 +38,10 @@ interface IDepositCardModalProps {
   showDialog: boolean;
   setShowDialog: Function;
   underlyingTokenSymbol: string;
-  otSymbol: string;
-  ytSymbol: string;
-  durationSeconds: number;
-  protocol: string;
-  otAddress: string;
-  ytAddress: string;
-  streamKey: string;
+  aToken:string;
+  chainId: number;
+  chainName: string;
+  vaultAddress: string;
   underlying: string;
   underlyingDecimals: number;
 }
@@ -106,13 +103,10 @@ export default function DepositCardModal({
   showDialog,
   setShowDialog,
   underlyingTokenSymbol,
-  otSymbol,
-  ytSymbol,
-  durationSeconds,
-  protocol,
-  otAddress,
-  ytAddress,
-  streamKey,
+  aToken,
+  chainId,
+  chainName,
+  vaultAddress,
   underlying,
   underlyingDecimals
 }: IDepositCardModalProps) {
@@ -128,9 +122,7 @@ export default function DepositCardModal({
   } = useWeb3React<Web3Provider>();
   const network = useNetwork(library);
 
-  const [otAmount, setotAmount] = useState<string>('');
   const [amountError, setAmountError] = useState<boolean>(false);
-  const [ytAmount, setytAmount] = useState<string>('');
   const [txPending, setTxPending] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
   const [otytAmountLoading, setotytAmountLoading] = useState<boolean>(false);
@@ -167,8 +159,6 @@ export default function DepositCardModal({
 
         setAmount('');
         setAmountPercentage(0);
-        setotAmount('');
-        setytAmount('');
         setShouldUpdateDepositCard({ shouldUpdate: true, underlyingAddress: underlying });
         const balance = await underlyingToken.getBalance();
         setBalance(balance);
@@ -225,8 +215,6 @@ export default function DepositCardModal({
       setAmountPercentage(0);
       setAmountError(false);
       getOTYTCountDebounced.cancel();
-      setotAmount('');
-      setytAmount('');
       setotytAmountLoading(false);
     }
   };
