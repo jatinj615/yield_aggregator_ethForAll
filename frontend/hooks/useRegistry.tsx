@@ -15,6 +15,7 @@ import {BigNumber} from 'ethers';
 import { Registry } from './contracts/RegistryType';
 import { isUndefined } from 'lodash-es';
 import { ExplorerDataType, getExplorerLink } from 'utils';
+import { Registry__factory } from './contracts/Registry__factory';
 
 const useRegistry = () => {
     const { setShouldUpdate } = useStoreActions((action) => action);
@@ -25,8 +26,9 @@ const useRegistry = () => {
     const chainId = library._network.chainId;
     const getRegistryContract = () => {
         try {
-            
-            return new ethers.Contract(registries[chainId], registry.abi, signer);
+            const registryFactory = new Registry__factory(signer);
+            const registry = registryFactory.attach(registries[chainId]);
+            return registry;
         } catch (err) {
             console.log(err);
         }
@@ -34,7 +36,6 @@ const useRegistry = () => {
 
     const userDepositRequest = async (
         destinationChainId: number,
-        relayerFee: BigNumber,
         slippage: BigNumber,
         underlying: string,
         amount: BigNumber,
@@ -42,7 +43,8 @@ const useRegistry = () => {
         routeId: BigNumber,
     ) => {
         try {
-            const registryContract = getRegistryContract();
+            const relayerFee = ethers.BigNumber.from("268412311997859");
+            
             const bridgeRequest: Registry.BridgeRequestStruct = {
                 destinationDomain: connextDomain[destinationChainId],
                 relayerFee: relayerFee,
@@ -57,7 +59,10 @@ const useRegistry = () => {
                 receiverAddress: await signer.getAddress(),
                 bridgeRequest: bridgeRequest
             }
-            const tx = await registryContract.connect(signer).userDepositRequest(payload);
+            console.log(payload);
+            const registryContract = getRegistryContract();
+            console.log(registryContract);
+            const tx = await registryContract.connect(signer).userDepositRequest(payload, {value: relayerFee});
 
             const { hash } = tx;
 
@@ -109,7 +114,7 @@ const useRegistry = () => {
                 });
             }
 
-            toast.success('You can also add Ownership token and Yield Token to your wallet', { id });
+            toast.success('', { id });
         } catch (err) {
             toast.error('An Error Occurred');
             console.log(err);

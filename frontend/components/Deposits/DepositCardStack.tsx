@@ -187,29 +187,16 @@ export default function DepositCardStack() {
   };
 
   const handleRowClick = (params, event, details) => {
+    resetDepositCardModal();
     setUnderlyingTokenSymbol(params?.row?.name);
     setUnderlying(params?.row?.underlyingAddress);
     setAToken(params?.row?.a_token);
     setChainId(params?.row?.chain_id);
     setChainName(params?.row?.chain_name);
     setVaultAddress(params?.row?.pool);
-    resetDepositCardModal();
     setShowDepositCardModal(true);
   };
 
-
-  
-  /* 
-        {showDepositCardModal && (
-        <DepositCardModal
-          showDialog={showDepositCardModal}
-          setShowDialog={handleShowDepositCardModal}
-          underlyingTokenSymbol={underlyingTokenSymbol}
-          vaultAddress={vaultAddress}
-          underlying={underlying}
-          underlyingDecimals={underlyingDecimals}
-        />
-  */
   return (
     <>
       <SearchBar

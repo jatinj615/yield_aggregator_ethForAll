@@ -112,7 +112,6 @@ export default function DepositCardModal({
   underlyingDecimals
 }: IDepositCardModalProps) {
   
-  
   const { setShouldUpdateDepositCard } = useStoreActions((action) => action);
   const { setShowConnectWalletModal } = useContext(ToastContext);
   const {
@@ -160,8 +159,8 @@ export default function DepositCardModal({
 
       if (approvedLimit.gte(amountToSubscribe)) {
         // TODO: add registry deposit tx
-        // await userDepositRequest(chainId, )
-        // await mint(amountToSubscribe, otAddress, ytAddress, protocol, underlying, durationSeconds, otSymbol, ytSymbol);
+        await userDepositRequest(chainId, ethers.BigNumber.from('30'), underlying, amountToSubscribe, vaultAddress, ethers.BigNumber.from('1'))
+        
 
         setAmount('');
         setAmountPercentage(0);
@@ -178,15 +177,6 @@ export default function DepositCardModal({
       setTxPending(false);
     }
   };
-
-  // const getOTYTCountDebounced = useRef(
-  //   debounce(async (fn: Function, input: ethers.BigNumber) => {
-  //     const { ot, yt } = await fn(input);
-  //     setotAmount(intlFormatNumber(bnum(ethers.utils.formatEther(ot)).dp(6, 1).toString(), 6));
-  //     setytAmount(intlFormatNumber(bnum(ethers.utils.formatEther(yt)).dp(6, 1).toString(), 6));
-  //     setotytAmountLoading(false);
-  //   }, 500)
-  // ).current;
 
   const handleInput = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.value) {
