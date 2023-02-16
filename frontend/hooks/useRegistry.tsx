@@ -11,12 +11,10 @@ import { v4 as uuidv4 } from 'uuid';
 import "utils/multiChainConstants";
 import { registries, connextDomain, ConnextWeth } from '../utils/multiChainConstants';
 import registry from './contracts/registry';
-import { providerUrls } from 'constants/chainIds';
 import {BigNumber} from 'ethers';
 import { Registry } from './contracts/RegistryType';
 import { isUndefined } from 'lodash-es';
 import { ExplorerDataType, getExplorerLink } from 'utils';
-import { create, SdkConfig } from "@connext/sdk";
 
 const useRegistry = () => {
     const { setShouldUpdate } = useStoreActions((action) => action);
@@ -41,25 +39,6 @@ const useRegistry = () => {
         vaultAddress: string,
         routeId: BigNumber,
     ) => {
-        const sdkConfig: SdkConfig = {
-            signerAddress: await signer?.getAddress(),
-            network: "testnet", // can be "mainnet" or "testnet"
-            chains: {
-                chainId: {
-                    providers: [providerUrls[chainId]],
-                },
-                destinationChainId: {
-                    providers: [providerUrls[destinationChainId]],
-                },
-            },
-        };
-        const originDomain = connextDomain[chainId].toString()
-        const destinationDomain = connextDomain[destinationChainId].toString()
-        // Create the SDK instance.
-        const {sdkBase} = await create(sdkConfig);
-        const relayerFee = (await sdkBase.estimateRelayerFee(
-            {originDomain, destinationDomain})).toString();
-
         try {
             const registryContract = getRegistryContract();
             const bridgeRequest: Registry.BridgeRequestStruct = {
