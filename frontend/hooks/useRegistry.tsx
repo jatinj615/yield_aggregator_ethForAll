@@ -13,7 +13,7 @@ import { registries, connextDomain, ConnextWeth } from '../utils/multiChainConst
 import registry from './contracts/registry';
 import { providerUrls } from 'constants/chainIds';
 import {BigNumber} from 'ethers';
-import { Registry } from '../../solidity/typechain/contracts/Registry';
+import { Registry } from './contracts/RegistryType';
 import { isUndefined } from 'lodash-es';
 import { ExplorerDataType, getExplorerLink } from 'utils';
 import { create, SdkConfig } from "@connext/sdk";
