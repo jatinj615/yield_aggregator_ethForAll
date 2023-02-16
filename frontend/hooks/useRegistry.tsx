@@ -12,7 +12,7 @@ import "utils/multiChainConstants";
 import { registries, connextDomain, ConnextWeth } from '../utils/multiChainConstants';
 import registry from './contracts/registry';
 import {BigNumber} from 'ethers';
-import { Registry } from '../../solidity/typechain/contracts/Registry';
+import { Registry } from './contracts/RegistryType';
 import { isUndefined } from 'lodash-es';
 import { ExplorerDataType, getExplorerLink } from 'utils';
 
