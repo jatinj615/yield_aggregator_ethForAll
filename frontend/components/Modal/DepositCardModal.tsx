@@ -111,8 +111,6 @@ export default function DepositCardModal({
   underlying,
   underlyingDecimals
 }: IDepositCardModalProps) {
-  
-  
   const { setShouldUpdateDepositCard } = useStoreActions((action) => action);
   const { setShowConnectWalletModal } = useContext(ToastContext);
   const {
@@ -160,7 +158,7 @@ export default function DepositCardModal({
 
       if (approvedLimit.gte(amountToSubscribe)) {
         // TODO: add registry deposit tx
-        // await userDepositRequest(chainId, )
+        // await userDepositRequest(chainId, 30, underlying, amountToSubscribe, vaultAddress, 1)
         // await mint(amountToSubscribe, otAddress, ytAddress, protocol, underlying, durationSeconds, otSymbol, ytSymbol);
 
         setAmount('');
@@ -306,7 +304,6 @@ export default function DepositCardModal({
   }, [underlyingToken, loading]);
 
   const getAvailableBalance = () => {
-    
     if (!active) {
       return 'No wallet connected';
     }

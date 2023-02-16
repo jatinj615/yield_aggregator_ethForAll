@@ -11,10 +11,12 @@ import { v4 as uuidv4 } from 'uuid';
 import "utils/multiChainConstants";
 import { registries, connextDomain, ConnextWeth } from '../utils/multiChainConstants';
 import registry from './contracts/registry';
+import { providerUrls } from 'constants/chainIds';
 import {BigNumber} from 'ethers';
 import { Registry } from '../../solidity/typechain/contracts/Registry';
 import { isUndefined } from 'lodash-es';
 import { ExplorerDataType, getExplorerLink } from 'utils';
+import { create, SdkConfig } from "@connext/sdk";
 
 const useRegistry = () => {
     const { setShouldUpdate } = useStoreActions((action) => action);
@@ -25,7 +27,6 @@ const useRegistry = () => {
     const chainId = library._network.chainId;
     const getRegistryContract = () => {
         try {
-            
             return new ethers.Contract(registries[chainId], registry.abi, signer);
         } catch (err) {
             console.log(err);
@@ -34,13 +35,31 @@ const useRegistry = () => {
 
     const userDepositRequest = async (
         destinationChainId: number,
-        relayerFee: BigNumber,
         slippage: BigNumber,
         underlying: string,
         amount: BigNumber,
         vaultAddress: string,
         routeId: BigNumber,
     ) => {
+        const sdkConfig: SdkConfig = {
+            signerAddress: await signer?.getAddress(),
+            network: "testnet", // can be "mainnet" or "testnet"
+            chains: {
+                chainId: {
+                    providers: [providerUrls[chainId]],
+                },
+                destinationChainId: {
+                    providers: [providerUrls[destinationChainId]],
+                },
+            },
+        };
+        const originDomain = connextDomain[chainId].toString()
+        const destinationDomain = connextDomain[destinationChainId].toString()
+        // Create the SDK instance.
+        const {sdkBase} = await create(sdkConfig);
+        const relayerFee = (await sdkBase.estimateRelayerFee(
+            {originDomain, destinationDomain})).toString();
+
         try {
             const registryContract = getRegistryContract();
             const bridgeRequest: Registry.BridgeRequestStruct = {
@@ -48,7 +67,7 @@ const useRegistry = () => {
                 relayerFee: relayerFee,
                 slippage: slippage,
                 asset: underlying
-            } 
+            }
             const payload: Registry.VaultRequestStruct = {
                 routeId: routeId,
                 amount: amount,
@@ -57,7 +76,8 @@ const useRegistry = () => {
                 receiverAddress: await signer.getAddress(),
                 bridgeRequest: bridgeRequest
             }
-            const tx = await registryContract.connect(signer).userDepositRequest(payload);
+            const tx = await registryContract.connect(signer)
+                .userDepositRequest(payload);
 
             const { hash } = tx;
 
