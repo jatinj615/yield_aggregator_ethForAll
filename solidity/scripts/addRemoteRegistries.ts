@@ -10,13 +10,13 @@ async function addRemoteRegistries(chainId: number, signer: Signer) {
     const keys = Object.keys(connextDomain);
 
     let remoteRegistries: Registry.RemoteRegistryStruct[] = [];
-
+    console.log(keys);
     for(let i = 0 ; i < keys.length; i++) {
         if (Number(keys[i]) != chainId) {
             remoteRegistries.push(
                 {
                     domainId: connextDomain[Number(keys[i])],
-                    reomoteRegistry: registries[chainId]
+                    reomoteRegistry: registries[Number(keys[i])]
                 }
             )
         }
