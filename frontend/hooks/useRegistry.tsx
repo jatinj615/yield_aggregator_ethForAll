@@ -43,7 +43,7 @@ const useRegistry = () => {
         routeId: BigNumber,
     ) => {
         try {
-            const relayerFee = ethers.BigNumber.from("268412311997859");
+            const relayerFee = ethers.BigNumber.from("32901718860961600");
             
             const bridgeRequest: Registry.BridgeRequestStruct = {
                 destinationDomain: connextDomain[destinationChainId],
@@ -62,7 +62,12 @@ const useRegistry = () => {
             console.log(payload);
             const registryContract = getRegistryContract();
             console.log(registryContract);
-            const tx = await registryContract.connect(signer).userDepositRequest(payload, {value: relayerFee});
+            let tx;
+            if(destinationChainId != chainId) {
+                tx = await registryContract.connect(signer).userDepositRequest(payload, {value: relayerFee});
+            } else {
+                tx = await registryContract.connect(signer).userDepositRequest(payload);
+            }
 
             const { hash } = tx;
 
