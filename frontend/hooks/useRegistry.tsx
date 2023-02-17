@@ -54,7 +54,7 @@ const useRegistry = () => {
             const payload: Registry.VaultRequestStruct = {
                 routeId: routeId,
                 amount: amount,
-                vaultAddress: "0x7b5C526B7F8dfdff278b4a3e045083FBA4028790",
+                vaultAddress: vaultAddress,
                 underlying: underlying,
                 receiverAddress: await signer.getAddress(),
                 bridgeRequest: bridgeRequest
