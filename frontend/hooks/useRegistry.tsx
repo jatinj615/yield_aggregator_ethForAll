@@ -70,7 +70,7 @@ const useRegistry = () => {
             }
 
             const { hash } = tx;
-
+            console.log(tx);
             // * toast message
             let id = uuidv4();
 

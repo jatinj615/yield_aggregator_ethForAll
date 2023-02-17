@@ -53,19 +53,12 @@ export declare namespace Registry {
     destinationDomain: PromiseOrValue<BigNumberish>;
     relayerFee: PromiseOrValue<BigNumberish>;
     slippage: PromiseOrValue<BigNumberish>;
-    asset: PromiseOrValue<string>;
   };
 
-  export type BridgeRequestStructOutput = [
-    number,
-    BigNumber,
-    BigNumber,
-    string
-  ] & {
+  export type BridgeRequestStructOutput = [number, BigNumber, BigNumber] & {
     destinationDomain: number;
     relayerFee: BigNumber;
     slippage: BigNumber;
-    asset: string;
   };
 
   export type VaultRequestStruct = {
@@ -106,8 +99,8 @@ export interface RegistryInterface extends utils.Interface {
     "rescueFunds(address,address,uint256)": FunctionFragment;
     "routes(uint256)": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
-    "userDepositRequest((uint256,uint256,address,address,address,(uint32,uint256,uint256,address)))": FunctionFragment;
-    "userWithdrawRequest((uint256,uint256,address,address,address,(uint32,uint256,uint256,address)))": FunctionFragment;
+    "userDepositRequest((uint256,uint256,address,address,address,(uint32,uint256,uint256)))": FunctionFragment;
+    "userWithdrawRequest((uint256,uint256,address,address,address,(uint32,uint256,uint256)))": FunctionFragment;
     "xReceive(bytes32,uint256,address,address,uint32,bytes)": FunctionFragment;
   };
 

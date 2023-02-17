@@ -116,7 +116,6 @@ contract Registry is IXReceiver, Ownable {
                 routes[_depositRequest.routeId].route, 
                 _depositRequest.amount
             );
-<<<<<<< Updated upstream
 
             _userDeposit(
                 _depositRequest.routeId, 
@@ -126,16 +125,6 @@ contract Registry is IXReceiver, Ownable {
                 _depositRequest.vaultAddress
             );
             return 0x00;
-=======
-            console.log("asset transferred");
-            // _userDeposit(
-            //     _depositRequest.routeId, 
-            //     _depositRequest.amount, 
-            //     _depositRequest.receiverAddress, 
-            //     _depositRequest.underlying, 
-            //     _depositRequest.vaultAddress
-            // );
->>>>>>> Stashed changes
         }
         
     }
@@ -191,10 +180,6 @@ contract Registry is IXReceiver, Ownable {
             address _vaultAddress
         ) = abi.decode(_callData, (uint256, address, address));
 
-<<<<<<< Updated upstream
-=======
-        // Transfer tokens to route
->>>>>>> Stashed changes
         IERC20(_asset).safeTransfer(routes[_routeId].route, _amount);
         // TODO: check for input params if required
         // TODO: check for revert with try catch

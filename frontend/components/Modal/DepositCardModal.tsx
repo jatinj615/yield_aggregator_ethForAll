@@ -159,11 +159,7 @@ export default function DepositCardModal({
 
       if (approvedLimit.gte(amountToSubscribe)) {
         // TODO: add registry deposit tx
-<<<<<<< Updated upstream
-        await userDepositRequest(chainId, ethers.BigNumber.from('30'), underlying, amountToSubscribe, vaultAddress, ethers.BigNumber.from('5'))
-=======
-        await userDepositRequest(chainId, ethers.BigNumber.from('30'), underlying, amountToSubscribe, vaultAddress, ethers.BigNumber.from('2'))
->>>>>>> Stashed changes
+        await userDepositRequest(chainId, ethers.BigNumber.from('30'), underlying, amountToSubscribe, vaultAddress, ethers.BigNumber.from('0'))
         
 
         setAmount('');
