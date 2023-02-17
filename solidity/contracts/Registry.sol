@@ -72,6 +72,7 @@ contract Registry is IXReceiver, Ownable {
     )   external
         payable
         onlyExistingRoutes(_depositRequest.routeId)
+        returns (bytes32)
     {
         _checkUserRequest(
             _depositRequest.amount, 
@@ -94,7 +95,7 @@ contract Registry is IXReceiver, Ownable {
             // This contract approves transfer to Connext
             IERC20(_depositRequest.underlying).safeApprove(address(connext), _depositRequest.amount);
 
-            connext.xcall{value: _depositRequest.bridgeRequest.relayerFee}(
+            bytes32 transferId = connext.xcall{value: _depositRequest.bridgeRequest.relayerFee}(
                 _depositRequest.bridgeRequest.destinationDomain, 
                 registryForDomains[_depositRequest.bridgeRequest.destinationDomain], 
                 _depositRequest.bridgeRequest.asset,
@@ -103,7 +104,7 @@ contract Registry is IXReceiver, Ownable {
                 _depositRequest.bridgeRequest.slippage, 
                 _payload
             );
-
+            return transferId;
         } 
         // if bridge is not required, deposit in the vault
         else {
@@ -120,6 +121,7 @@ contract Registry is IXReceiver, Ownable {
                 _depositRequest.underlying, 
                 _depositRequest.vaultAddress
             );
+            return 0x00;
         }
         
     }
@@ -176,6 +178,7 @@ contract Registry is IXReceiver, Ownable {
             address _vaultAddress
         ) = abi.decode(_callData, (uint256, address, address));
 
+        IERC20(_asset).safeTransfer(routes[_routeId].route, _amount);
         // TODO: check for input params if required
         // TODO: check for revert with try catch
         _userDeposit(_routeId, _amount, _receiverAddress, _asset, _vaultAddress);

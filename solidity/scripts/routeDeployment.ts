@@ -59,7 +59,7 @@ async function main() {
         console.log(routeAddress);
 
         // verify Contract
-        // await verifyContract(routeAddress, [registries[network.chainId]]);
+        await verifyContract(routeAddress, [registries[network.chainId], AaveWeth[network.chainId]]);
 
     } else {
         console.log("Network not found");
