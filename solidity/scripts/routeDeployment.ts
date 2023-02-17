@@ -25,7 +25,7 @@ async function deployRoute(registryAddress: string): Promise<string> {
 
 }
 
-async function deployAaveWETHRoute(registryAddress: string, chainId: number): Promise<string> {
+export async function deployAaveWETHRoute(registryAddress: string, chainId: number): Promise<string> {
 
     const RouteFactory = await ethers.getContractFactory("AaveWETHTestnetRoute");
 

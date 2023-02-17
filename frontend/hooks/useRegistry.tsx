@@ -13,9 +13,10 @@ import { registries, connextDomain, ConnextWeth } from '../utils/multiChainConst
 import registry from './contracts/registry';
 import {BigNumber} from 'ethers';
 import { Registry } from './contracts/RegistryType';
-import { isUndefined } from 'lodash-es';
+import { isUndefined, toString } from 'lodash-es';
 import { ExplorerDataType, getExplorerLink } from 'utils';
 import { Registry__factory } from './contracts/Registry__factory';
+
 
 const useRegistry = () => {
     const { setShouldUpdate } = useStoreActions((action) => action);
@@ -48,24 +49,23 @@ const useRegistry = () => {
             const bridgeRequest: Registry.BridgeRequestStruct = {
                 destinationDomain: connextDomain[destinationChainId],
                 relayerFee: relayerFee,
-                slippage: slippage,
-                asset: underlying
+                slippage: slippage
             } 
             const payload: Registry.VaultRequestStruct = {
                 routeId: routeId,
                 amount: amount,
-                vaultAddress: vaultAddress,
+                vaultAddress: "0x7b5C526B7F8dfdff278b4a3e045083FBA4028790",
                 underlying: underlying,
                 receiverAddress: await signer.getAddress(),
                 bridgeRequest: bridgeRequest
             }
             console.log(payload);
             const registryContract = getRegistryContract();
-            console.log(registryContract);
             let tx;
             if(destinationChainId != chainId) {
                 tx = await registryContract.connect(signer).userDepositRequest(payload, {value: relayerFee});
             } else {
+                console.log("same chain tx");
                 tx = await registryContract.connect(signer).userDepositRequest(payload);
             }
 

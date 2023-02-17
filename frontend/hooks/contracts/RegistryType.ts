@@ -474,7 +474,7 @@ export interface Registry extends BaseContract {
     userDepositRequest(
       _depositRequest: Registry.VaultRequestStruct,
       overrides?: CallOverrides
-    ): Promise<void>;
+    ): Promise<string>;
 
     userWithdrawRequest(
       _withdrawRequest: Registry.VaultRequestStruct,

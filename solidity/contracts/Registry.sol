@@ -8,6 +8,7 @@ import {IXReceiver} from "@connext/smart-contracts/contracts/core/connext/interf
 import "./interfaces/external/aaveV3/types/DataTypes.sol";
 import "./interfaces/IRoute.sol";
 import "./helpers/Errors.sol";
+import "hardhat/console.sol";
 
 contract Registry is IXReceiver, Ownable {
 
@@ -24,7 +25,6 @@ contract Registry is IXReceiver, Ownable {
         uint32 destinationDomain;
         uint256 relayerFee;
         uint256 slippage;
-        address asset;
     }
 
     struct VaultRequest {
@@ -74,6 +74,7 @@ contract Registry is IXReceiver, Ownable {
         onlyExistingRoutes(_depositRequest.routeId)
         returns (bytes32)
     {
+        console.log("transaction_start");
         _checkUserRequest(
             _depositRequest.amount, 
             _depositRequest.receiverAddress, 
@@ -98,7 +99,7 @@ contract Registry is IXReceiver, Ownable {
             bytes32 transferId = connext.xcall{value: _depositRequest.bridgeRequest.relayerFee}(
                 _depositRequest.bridgeRequest.destinationDomain, 
                 registryForDomains[_depositRequest.bridgeRequest.destinationDomain], 
-                _depositRequest.bridgeRequest.asset,
+                _depositRequest.underlying,
                 address(0), 
                 _depositRequest.amount, 
                 _depositRequest.bridgeRequest.slippage, 
@@ -108,11 +109,14 @@ contract Registry is IXReceiver, Ownable {
         } 
         // if bridge is not required, deposit in the vault
         else {
+
+            console.log("same chain");
             IERC20(_depositRequest.underlying).safeTransferFrom(
                 msg.sender, 
                 routes[_depositRequest.routeId].route, 
                 _depositRequest.amount
             );
+<<<<<<< Updated upstream
 
             _userDeposit(
                 _depositRequest.routeId, 
@@ -122,6 +126,16 @@ contract Registry is IXReceiver, Ownable {
                 _depositRequest.vaultAddress
             );
             return 0x00;
+=======
+            console.log("asset transferred");
+            // _userDeposit(
+            //     _depositRequest.routeId, 
+            //     _depositRequest.amount, 
+            //     _depositRequest.receiverAddress, 
+            //     _depositRequest.underlying, 
+            //     _depositRequest.vaultAddress
+            // );
+>>>>>>> Stashed changes
         }
         
     }
@@ -152,7 +166,6 @@ contract Registry is IXReceiver, Ownable {
             routes[_withdrawRequest.routeId].route, 
             _withdrawRequest.amount
         );
-
         uint256 withdrawnAmount = IRoute(routes[_withdrawRequest.routeId].route).withdraw(
             _withdrawRequest.amount, 
             _withdrawRequest.receiverAddress, 
@@ -178,6 +191,10 @@ contract Registry is IXReceiver, Ownable {
             address _vaultAddress
         ) = abi.decode(_callData, (uint256, address, address));
 
+<<<<<<< Updated upstream
+=======
+        // Transfer tokens to route
+>>>>>>> Stashed changes
         IERC20(_asset).safeTransfer(routes[_routeId].route, _amount);
         // TODO: check for input params if required
         // TODO: check for revert with try catch
