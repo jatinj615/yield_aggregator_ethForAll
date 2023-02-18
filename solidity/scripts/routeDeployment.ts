@@ -25,7 +25,7 @@ async function deployRoute(registryAddress: string): Promise<string> {
 
 }
 
-async function deployAaveWETHRoute(registryAddress: string, chainId: number): Promise<string> {
+export async function deployAaveWETHRoute(registryAddress: string, chainId: number): Promise<string> {
 
     const RouteFactory = await ethers.getContractFactory("AaveWETHTestnetRoute");
 
@@ -59,7 +59,7 @@ async function main() {
         console.log(routeAddress);
 
         // verify Contract
-        // await verifyContract(routeAddress, [registries[network.chainId]]);
+        await verifyContract(routeAddress, [registries[network.chainId], AaveWeth[network.chainId]]);
 
     } else {
         console.log("Network not found");

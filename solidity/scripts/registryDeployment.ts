@@ -7,7 +7,7 @@ export async function deployRegistry(connextAddress: string): Promise<string> {
     const RegistryFactory = await ethers.getContractFactory("Registry");
 
     const registry = await RegistryFactory.deploy(connextAddress);
-
+    
     const tx = await registry.deployed();
 
     await tx.deployTransaction.wait(5)

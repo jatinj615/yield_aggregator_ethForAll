@@ -32,12 +32,13 @@ contract AaveWETHTestnetRoute is RouteBase {
     ) external override onlyRegistry {
         // withdraw weth from connext weth
         IWETH(_underlying).withdraw(_amount);
+
         // deposit to aave weth
         weth.deposit{value: _amount}();
 
         // deposit to aave weth vault
-        IERC20(_underlying).safeApprove(_vaultAddress, _amount);
-        IPool(_vaultAddress).supply(_underlying, _amount, _receiver, 0);
+        IERC20(address(weth)).safeApprove(_vaultAddress, _amount);
+        IPool(_vaultAddress).supply(address(weth), _amount, _receiver, 0);
     }
 
     function getYieldBearingToken(
@@ -56,6 +57,10 @@ contract AaveWETHTestnetRoute is RouteBase {
     ) external override onlyRegistry returns (uint256) {
         uint256 amountWithdrawn = IPool(_vaultAddress).withdraw(_underlying, _amount, _receiver);
         return amountWithdrawn;
+    }
+
+    receive() external payable {
+        // TODO: add only weth acceptable
     }
 
 }

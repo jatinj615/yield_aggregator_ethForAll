@@ -6,10 +6,10 @@ export const connext: { [key: number]: string} = {
 }
 
 export const registries: { [key: number]: string } = {
-    5: "0x7081301737A591fa881e6aB13bA02Cf10231305c",
-    420: "0x424DcB01B81C11F0663fF5e5CdbB405C0dB6f7C5",
-    80001: "0xd3BBd3D02c8ff898d106a2539bb8afD0fCF9dec1",
-    421613: "0x424DcB01B81C11F0663fF5e5CdbB405C0dB6f7C5"
+    5: "0x5e6622b61b02F0e94CB804109294b3d289F039e2",
+    420: "0x20C3eA2db6F4F945628eDF118916A4ded4005945",
+    80001: "0x27320cc0CE550993F7F9189B376c5129e119EeA6",
+    421613: "0xc9a9969CFd274E357Cc1613fA957b25dCe6aBa85"
 }
 
 export const connextDomain: { [key: number]: number} = {
@@ -21,20 +21,16 @@ export const connextDomain: { [key: number]: number} = {
 
 export const registryRoutes: { [key: number]: { [key: number] : string}} = {
     5: {
-        0: "0xEc8801FA4A554DAD9cCe27b7294c93A5CD764C26",
-        1: "0x284d32bdB98617641dc1834241BdE78a5161ddF6"
+        0: "0xD060152638f6e4F7E28f14892515e6aFD9aE62D6"
     },
     420: {
-        0: "0x68B66f64D5a902A0f21E886469B3487bcAa79035",
-        1: "0x210f83DaC34A15e6ac2B804045B2891Cfc3b2940"
+        0: "0x165342451EAd84B8F8C268c8694ed296733FC6f0"
     },
     80001: {
-        0: "0xc9a9969CFd274E357Cc1613fA957b25dCe6aBa85",
-        1: "0x286e84CCed9Fd4E8518870E6158A1cb74726b120"
+        0: "0xE101f0519E9935D2813a654444F1848fd50bC8c8"
     },
     421613: {
-        0: "0x68B66f64D5a902A0f21E886469B3487bcAa79035",
-        1: "0x210f83DaC34A15e6ac2B804045B2891Cfc3b2940"
+        0: "0x20C3eA2db6F4F945628eDF118916A4ded4005945"
     }
 }
 

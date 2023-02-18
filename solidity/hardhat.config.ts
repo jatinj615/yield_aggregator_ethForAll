@@ -119,7 +119,7 @@ const config: HardhatUserConfig = {
       saveDeployments: true,
       tags: ["test", "local"],
       forking: {
-        url: "https://eth-mainnet.alchemyapi.io/v2/" + alchemyApiKey
+        url: "https://eth-goerli.g.alchemy.com/v2/" + alchemyApiKey
       }
     },
     goerli: createTestnetConfig("eth-goerli"),
@@ -152,6 +152,9 @@ const config: HardhatUserConfig = {
   typechain: {
     outDir: "typechain",
     target: "ethers-v5",
+  },
+  mocha: {
+    timeout: 2000000
   },
   etherscan: {
     apiKey: {
