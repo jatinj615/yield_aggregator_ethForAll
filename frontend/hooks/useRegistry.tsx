@@ -67,8 +67,12 @@ const useRegistry = () => {
             if(destinationChainId != chainId) {
                 const connextSDKResponse = await getConnextData(chainId, destinationChainId, amount.toString());
                 console.log((connextSDKResponse));
+                
                 relayerFee = ethers.BigNumber.from(String(connextSDKResponse.relayerFee));
+                // Note: For Demo Purpose passing the triple relayer fee
+                relayerFee = relayerFee.mul(ethers.BigNumber.from('3'));
                 slippage = ethers.BigNumber.from(String(connextSDKResponse.destinationSlippage));
+                // Note: For Demo purpose passing the slippage as 3%
                 slippage = ethers.BigNumber.from("300");
             }
             const bridgeRequest: BridgeRequestStruct = {
