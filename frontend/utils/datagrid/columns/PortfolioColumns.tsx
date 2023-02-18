@@ -163,11 +163,11 @@ export function Term({ params, theme, minWidth, loading = false, cellPadding = 1
   const greenBreakpoint = moment.unix(
     parseInt(params?.row?.startTimestamp, 10) + parseInt(params?.row?.durationSeconds, 10) * 0.9
   );
-  let chipTheme = theme.unreal.datagrid.chip.red;
+  let chipTheme = theme.yielder.datagrid.chip.red;
   if (moment().isSameOrAfter(greenBreakpoint)) {
-    chipTheme = theme.unreal.datagrid.chip.green;
+    chipTheme = theme.yielder.datagrid.chip.green;
   } else if (moment().isBetween(yellowBreakpoint, greenBreakpoint, undefined, '[)')) {
-    chipTheme = theme.unreal.datagrid.chip.yellow;
+    chipTheme = theme.yielder.datagrid.chip.yellow;
   }
 
   return (

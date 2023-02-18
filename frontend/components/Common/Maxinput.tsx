@@ -80,12 +80,12 @@ const MaxInput = ({
         alignItems="center"
         justifyContent="space-between"
         sx={{
-          bgcolor: theme.unreal.maxinput.backgroundColor,
+          bgcolor: theme.yielder.maxinput.backgroundColor,
           position: 'relative',
           width: '100%',
           borderRadius: theme.typography.pxToRem(8),
           // on error show a different red color
-          border: `2px solid ${error ? theme.palette.error.light : theme.unreal.maxinput.borderColor}`,
+          border: `2px solid ${error ? theme.palette.error.light : theme.yielder.maxinput.borderColor}`,
           ...customStyles
         }}
         onClick={() => {

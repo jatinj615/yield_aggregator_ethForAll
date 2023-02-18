@@ -1,4 +1,4 @@
 export enum PoolType {
-  UNREAL = 'Unreal',
+  yielder = 'yielder',
   WEIGHTED = 'Weighted'
 }

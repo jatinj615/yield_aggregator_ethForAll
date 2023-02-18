@@ -14,8 +14,8 @@ interface StyledTabsProps {
 const StyledTabs = styled((props: StyledTabsProps) => (
   <Tabs {...props} TabIndicatorProps={{ children: <span className="MuiTabs-indicatorSpan" /> }} />
 ))(({ theme }) => ({
-  backgroundColor: theme.unreal.tab.backgroundColor,
-  border: `1px solid ${theme.unreal.tab.borderColor}`,
+  backgroundColor: theme.yielder.tab.backgroundColor,
+  border: `1px solid ${theme.yielder.tab.borderColor}`,
   padding: theme.typography.pxToRem(6),
   borderRadius: theme.typography.pxToRem(32),
   '& .MuiTabs-flexContainer': {

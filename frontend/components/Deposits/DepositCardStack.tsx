@@ -13,9 +13,7 @@ import { useStoreActions, useStoreState } from 'store/globalStore';
 // utils
 import { depositDatagridRowHeight, getDepositDatagridColumns } from 'utils/datagrid';
 import { constantStrings } from 'utils/constants';
-import { calculateAaveAPY, calculateCompoundAPY, escapeRegExp, getDepositCardData, getSimplePrice, getAaveData } from 'utils';
-import { getYearnAPY } from 'utils/getYearnAPY';
-import { contract } from 'utils/contracts';
+import { escapeRegExp, getDepositCardData, getSimplePrice, getAaveData } from 'utils';
 import { CurrencyId, Protocol } from 'enums';
 import { getCurrencyPath } from 'constants/currencyPaths';
 
@@ -151,7 +149,7 @@ export default function DepositCardStack() {
       const searchRegex = new RegExp(escapeRegExp(queryString), 'i');
       return filter(
         rowData,
-        (row: IObject) => searchRegex.test(row?.name.toString()) || searchRegex.test(row?.vault.toString())
+        (row: IObject) => searchRegex.test(row?.chain_name) || searchRegex.test(row?.name)
       );
     } else {
       return rowData;
@@ -225,9 +223,9 @@ export default function DepositCardStack() {
         <Box
           sx={{
             height: '900px',
-            '& .unreal-app-theme--table-card': {
+            '& .yielder-app-theme--table-card': {
               marginBottom: theme.typography.pxToRem(2),
-              bgcolor: theme.unreal.card.backgroundColor,
+              bgcolor: theme.yielder.card.backgroundColor,
               boxShadow: '0px 10px 100px rgba(0, 0, 0, 0.06)',
               border: 0,
               borderRadius: theme.typography.pxToRem(8),
@@ -263,7 +261,7 @@ export default function DepositCardStack() {
             columns={getDepositDatagridColumns(theme)}
             rows={getRows()}
             onRowClick={handleRowClick}
-            getRowClassName={(_params) => `unreal-app-theme--table-card`}
+            getRowClassName={(_params) => `yielder-app-theme--table-card`}
             hideFooter
             rowHeight={depositDatagridRowHeight}
             getRowSpacing={(params: GridRowSpacingParams): GridRowSpacing => ({ top: 0, bottom: 20 })}

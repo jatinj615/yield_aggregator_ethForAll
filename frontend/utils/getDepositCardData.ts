@@ -1,6 +1,5 @@
 // * get aggregate deposit card data
 import { map } from 'lodash-es';
-import { Protocol } from 'enums';
 
 interface IObject {
   [key: string]: any;

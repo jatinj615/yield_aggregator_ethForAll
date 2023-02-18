@@ -39,7 +39,7 @@ const BootstrapDialogTitle = (props: any) => {
 
   return (
     <DialogTitle
-      sx={{ m: 0, px: 6, py: 3, backgroundColor: theme.unreal.modal.buttonContainerBackgroundColor }}
+      sx={{ m: 0, px: 6, py: 3, backgroundColor: theme.yielder.modal.buttonContainerBackgroundColor }}
       {...other}
     >
       <Grid container justifyContent="space-between" alignItems="center" wrap="nowrap">
@@ -121,7 +121,7 @@ export default function ConnectWalletModal() {
       onClose={hideDialog}
       sx={{
         '& .MuiDialog-paper': {
-          background: theme.unreal.modal.backgroundColor,
+          background: theme.yielder.modal.backgroundColor,
           borderRadius: theme.typography.pxToRem(16)
         }
       }}

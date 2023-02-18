@@ -59,8 +59,8 @@ const theme = (mode: PaletteMode) => ({
           }
         })
   },
-  // * different custom theme options for unreal app
-  unreal: {
+  // * different custom theme options for yielder app
+  yielder: {
     ...(mode === 'light'
       ? {
           tab: {
@@ -163,7 +163,7 @@ const theme = (mode: PaletteMode) => ({
 // * reference link https://mui.com/customization/theming/#custom-variables
 declare module '@mui/material/styles' {
   interface Theme {
-    unreal: {
+    yielder: {
       tab: {
         borderColor: string;
         backgroundColor: string;
@@ -214,7 +214,7 @@ declare module '@mui/material/styles' {
 
   // ? allow configuration using `createTheme`
   interface ThemeOptions {
-    unreal?: {
+    yielder?: {
       tab?: {
         borderColor?: string;
         backgroundColor?: string;
