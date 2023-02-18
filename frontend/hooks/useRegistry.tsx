@@ -10,7 +10,7 @@ import toast from 'react-hot-toast';
 import { v4 as uuidv4 } from 'uuid';
 import "utils/multiChainConstants";
 import { registries, connextDomain, ConnextWeth } from '../utils/multiChainConstants';
-import registry from './contracts/registry';
+import { Registry__factory } from './typechain';
 import {BigNumber} from 'ethers';
 import { isUndefined, toString } from 'lodash-es';
 import { ExplorerDataType, getExplorerLink } from 'utils';
@@ -41,11 +41,9 @@ const useRegistry = () => {
     const chainId = library._network.chainId;
     const getRegistryContract = () => {
         try {
-            let abi = [
-                'function userDepositRequest(VaultRequest calldata _depositRequest) external payable returns(bytes32)',
-                'function userWithdrawRequest(VaultRequest calldata _withdrawRequest) external payable returns(uint256)'
-            ]
-            const registry = new ethers.Contract(registries[chainId], abi, signer);
+            const registryFactory = new Registry__factory(signer);
+            const registry = registryFactory.attach(registries[chainId]);
+            console.log(registry);
             return registry;
         } catch (err) {
             console.log(err);
