@@ -42,7 +42,7 @@ const useRegistry = () => {
     const getRegistryContract = () => {
         try {
             let abi = [
-                'function userDepositRequest(VaultRequest calldata _depositRequest) external payable',
+                'function userDepositRequest(VaultRequest calldata _depositRequest) external payable returns(bytes32)',
                 'function userWithdrawRequest(VaultRequest calldata _withdrawRequest) external payable returns(uint256)'
             ]
             const registry = new ethers.Contract(registries[chainId], abi, signer);

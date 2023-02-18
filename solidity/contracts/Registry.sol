@@ -8,7 +8,6 @@ import {IXReceiver} from "@connext/smart-contracts/contracts/core/connext/interf
 import "./interfaces/external/aaveV3/types/DataTypes.sol";
 import "./interfaces/IRoute.sol";
 import "./helpers/Errors.sol";
-import "hardhat/console.sol";
 
 contract Registry is IXReceiver, Ownable {
 
@@ -49,6 +48,8 @@ contract Registry is IXReceiver, Ownable {
 
     event RouteDisabled(uint256 routeId);
 
+    event Bridged(address sender, bytes32 transferId);
+
 
     // Todo: add source chain authentication by mapping sourceDomain->sourceRegsitry
     modifier onlySource(address _originSender, uint32 _origin) {
@@ -74,7 +75,6 @@ contract Registry is IXReceiver, Ownable {
         onlyExistingRoutes(_depositRequest.routeId)
         returns (bytes32)
     {
-        console.log("transaction_start");
         _checkUserRequest(
             _depositRequest.amount, 
             _depositRequest.receiverAddress, 
@@ -105,12 +105,13 @@ contract Registry is IXReceiver, Ownable {
                 _depositRequest.bridgeRequest.slippage, 
                 _payload
             );
+
+            emit Bridged(msg.sender, transferId);
             return transferId;
         } 
         // if bridge is not required, deposit in the vault
         else {
 
-            console.log("same chain");
             IERC20(_depositRequest.underlying).safeTransferFrom(
                 msg.sender, 
                 routes[_depositRequest.routeId].route, 
