@@ -33,13 +33,18 @@ export function getExplorerLink(data: string, type: ExplorerDataType, chainId: n
   }
 }
 
-export * from './calc';
+export const escapeRegExp = (value: string): string => {
+  return value.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
+};
+
+export const isIncorrectNumberFormat = (param) => {
+  const format = /[!@#$%^&*()_+\-=e\[\]{};':"\\|,<>\/?]+/;
+  return format.test(param);
+};
+
 export * from './formatNumber';
-export * from './getBalances';
 export * from './getDepositCardData';
-export * from './getPoolCardData';
 export * from './getCoinGecko';
 export * from './getAaveData';
 export * from './getEthereumProviderLibrary';
 export * from './storage';
-export * from './getPoolInternalData';

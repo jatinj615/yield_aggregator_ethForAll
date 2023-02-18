@@ -12,11 +12,25 @@ import "utils/multiChainConstants";
 import { registries, connextDomain, ConnextWeth } from '../utils/multiChainConstants';
 import registry from './contracts/registry';
 import {BigNumber} from 'ethers';
-import { Registry } from './contracts/RegistryType';
 import { isUndefined, toString } from 'lodash-es';
 import { ExplorerDataType, getExplorerLink } from 'utils';
 import { Registry__factory } from './contracts/Registry__factory';
 import { getConnextData } from '../utils/getConnextData';
+
+type BridgeRequestStruct = {
+    destinationDomain: BigNumber;
+    relayerFee: BigNumber;
+    slippage: BigNumber;
+};
+
+type VaultRequestStruct = {
+    routeId: BigNumber;
+    amount: BigNumber;
+    vaultAddress: string;
+    underlying: string;
+    receiverAddress: string;
+    bridgeRequest: BridgeRequestStruct;
+};
 
 
 const useRegistry = () => {
@@ -55,12 +69,12 @@ const useRegistry = () => {
                 slippage = ethers.BigNumber.from(String(connextSDKResponse.destinationSlippage));
                 slippage = ethers.BigNumber.from("300");
             }
-            const bridgeRequest: Registry.BridgeRequestStruct = {
-                destinationDomain: connextDomain[destinationChainId],
+            const bridgeRequest: BridgeRequestStruct = {
+                destinationDomain: ethers.BigNumber.from(connextDomain[destinationChainId].toString()),
                 relayerFee: relayerFee,
                 slippage: slippage
             } 
-            const payload: Registry.VaultRequestStruct = {
+            const payload: VaultRequestStruct = {
                 routeId: routeId,
                 amount: amount,
                 vaultAddress: vaultAddress,

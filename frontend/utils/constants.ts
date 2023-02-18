@@ -1,20 +1,12 @@
 import { BigNumber, bnum } from './poolCalc/utils/bignumber';
 
 export const constantStrings = {
-  principal: 'Ownership',
-  yield: 'Yield',
   allProtocols: 'All Protocols',
   error: 'Error ...',
-  principalPool: 'Ownership Pool',
-  yieldPool: 'Yield Pool',
-  principalToken: 'Ownership Token',
-  yieldToken: 'Yield Token',
   hide: 'Hide',
   showMore: 'Show More',
   using: 'Using',
   amount: 'Amount',
-  oTReceived: 'OT Received',
-  yTReceived: 'YT Received',
   deposit: 'Deposit',
   approve: 'Approve',
   walletApprovalRequired: 'Wallet approval required',

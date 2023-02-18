@@ -13,9 +13,7 @@ import { useStoreActions, useStoreState } from 'store/globalStore';
 // utils
 import { depositDatagridRowHeight, getDepositDatagridColumns } from 'utils/datagrid';
 import { constantStrings } from 'utils/constants';
-import { calculateAaveAPY, calculateCompoundAPY, escapeRegExp, getDepositCardData, getSimplePrice, getAaveData } from 'utils';
-import { getYearnAPY } from 'utils/getYearnAPY';
-import { contract } from 'utils/contracts';
+import { escapeRegExp, getDepositCardData, getSimplePrice, getAaveData } from 'utils';
 import { CurrencyId, Protocol } from 'enums';
 import { getCurrencyPath } from 'constants/currencyPaths';
 
