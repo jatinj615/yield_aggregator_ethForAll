@@ -14,7 +14,6 @@ import registry from './contracts/registry';
 import {BigNumber} from 'ethers';
 import { isUndefined, toString } from 'lodash-es';
 import { ExplorerDataType, getExplorerLink } from 'utils';
-import { Registry__factory } from './contracts/Registry__factory';
 import { getConnextData } from '../utils/getConnextData';
 
 type BridgeRequestStruct = {
@@ -42,8 +41,11 @@ const useRegistry = () => {
     const chainId = library._network.chainId;
     const getRegistryContract = () => {
         try {
-            const registryFactory = new Registry__factory(signer);
-            const registry = registryFactory.attach(registries[chainId]);
+            let abi = [
+                'function userDepositRequest(VaultRequest calldata _depositRequest) external payable',
+                'function userWithdrawRequest(VaultRequest calldata _withdrawRequest) external payable returns(uint256)'
+            ]
+            const registry = new ethers.Contract(registries[chainId], abi, signer);
             return registry;
         } catch (err) {
             console.log(err);
