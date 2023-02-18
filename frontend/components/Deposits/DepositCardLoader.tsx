@@ -2,13 +2,8 @@ import { Grid, Theme } from '@mui/material';
 
 import { depositColumns } from 'utils/datagrid';
 import {
-  FixedAPR,
-  Liquidity,
-  LPAPY,
-  Price,
   Stream,
-  Term,
-  yielderTVL,
+  YielderTVL,
   VaultAPY
 } from 'utils/datagrid/columns/DepositColumns';
 
@@ -34,19 +29,9 @@ function DepositCardLoader({ theme, rowHeight }: IDepositCardLoaderProps) {
       {/* Stream */}
       <Stream minWidth={depositColumns.stream.minWidth} loading />
       {/* yielder TVL */}
-      <yielderTVL minWidth={depositColumns.yielderTVL.minWidth} loading />
+      <YielderTVL minWidth={depositColumns.YielderTVL.minWidth} loading />
       {/* Vault APY */}
       <VaultAPY minWidth={depositColumns.vaultAPY.minWidth} loading />
-      {/* LP APY */}
-      {/* <LPAPY minWidth={depositColumns.lpAPY.minWidth} loading theme={theme} /> */}
-      {/* Liquidity */}
-      {/* <Liquidity minWidth={depositColumns.liquidity.minWidth} loading theme={theme} /> */}
-      {/* Price */}
-      {/* <Price minWidth={depositColumns.price.minWidth} loading theme={theme} /> */}
-      {/* Fixed APR */}
-      {/* <FixedAPR minWidth={depositColumns.fixedAPR.minWidth} loading /> */}
-      {/* Term */}
-      {/* <Term minWidth={depositColumns.term.minWidth} loading theme={theme} /> */}
     </Grid>
   );
 }

@@ -149,7 +149,7 @@ export default function DepositCardStack() {
       const searchRegex = new RegExp(escapeRegExp(queryString), 'i');
       return filter(
         rowData,
-        (row: IObject) => searchRegex.test(row?.name.toString()) || searchRegex.test(row?.vault.toString())
+        (row: IObject) => searchRegex.test(row?.chain_name) || searchRegex.test(row?.name)
       );
     } else {
       return rowData;

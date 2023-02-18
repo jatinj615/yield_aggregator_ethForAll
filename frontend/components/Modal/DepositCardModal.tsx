@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { ethers } from 'ethers';
 import toast from 'react-hot-toast';
-import { debounce } from 'lodash-es';
 
 import {
   Avatar,
@@ -30,8 +29,6 @@ import { constantStrings } from 'utils/constants';
 import { bnum, ZERO } from 'utils/poolCalc/utils/bignumber';
 import { useWeb3React } from '@web3-react/core';
 import { Web3Provider } from '@ethersproject/providers';
-import { SUPPORTED_NETWORKS } from 'constants/networkNames';
-import { getCurrencyPath } from 'constants/currencyPaths';
 import { ToastContext } from 'context/toastContext';
 import { ConnextWeth, registries } from '../../utils/multiChainConstants';
 
@@ -121,7 +118,8 @@ export default function DepositCardModal({
     library
   } = useWeb3React<Web3Provider>();
   const network = useNetwork(library);
-  const connectedChainId = library._network.chainId
+  console.log(network)
+  const connectedChainId = library.network.chainId
   underlying = ConnextWeth[connectedChainId]
   const erc20 = useERC20();
   const underlyingToken = useMemo(() => erc20(underlying), [erc20, underlying]);
