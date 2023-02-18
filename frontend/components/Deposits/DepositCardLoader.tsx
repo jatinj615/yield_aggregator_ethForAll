@@ -8,7 +8,7 @@ import {
   Price,
   Stream,
   Term,
-  UnrealTVL,
+  yielderTVL,
   VaultAPY
 } from 'utils/datagrid/columns/DepositColumns';
 
@@ -21,7 +21,7 @@ function DepositCardLoader({ theme, rowHeight }: IDepositCardLoaderProps) {
   return (
     <Grid
       sx={{
-        backgroundColor: theme.unreal.card.backgroundColor,
+        backgroundColor: theme.yielder.card.backgroundColor,
         borderRadius: theme.typography.pxToRem(8),
         maxHeight: 'none !important',
         height: rowHeight
@@ -33,8 +33,8 @@ function DepositCardLoader({ theme, rowHeight }: IDepositCardLoaderProps) {
     >
       {/* Stream */}
       <Stream minWidth={depositColumns.stream.minWidth} loading />
-      {/* Unreal TVL */}
-      <UnrealTVL minWidth={depositColumns.unrealTVL.minWidth} loading />
+      {/* yielder TVL */}
+      <yielderTVL minWidth={depositColumns.yielderTVL.minWidth} loading />
       {/* Vault APY */}
       <VaultAPY minWidth={depositColumns.vaultAPY.minWidth} loading />
       {/* LP APY */}

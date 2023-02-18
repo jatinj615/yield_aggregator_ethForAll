@@ -27,7 +27,7 @@ import { useNetwork } from 'hooks/ethereum';
 
 import StructureComponent from 'components/Structure/Structure';
 
-function InnerUnrealApp({ Component, pageProps }: AppProps) {
+function InneryielderApp({ Component, pageProps }: AppProps) {
   const mode = useStoreState((state) => state.theme.mode);
   const setTheme = useStoreActions((actions) => actions.setTheme);
   const { setToastData } = useContext(ToastContext);
@@ -65,7 +65,7 @@ function InnerUnrealApp({ Component, pageProps }: AppProps) {
 const store = createStore<StoreModel>(globalStore);
 
 // * this is the main setup file where all the top level library injections happen
-function UnrealApp({ Component, pageProps }: AppProps) {
+function yielderApp({ Component, pageProps }: AppProps) {
   // * initiate apollo
   const apolloClient = useApollo(pageProps);
   const [toastdata, setToastData] = useState();
@@ -77,7 +77,7 @@ function UnrealApp({ Component, pageProps }: AppProps) {
       <Web3ReactProvider getLibrary={getEthereumProviderLibrary}>
         <ToastContext.Provider value={value}>
           <ApolloProvider client={apolloClient}>
-            <InnerUnrealApp Component={Component} {...pageProps}></InnerUnrealApp>
+            <InneryielderApp Component={Component} {...pageProps}></InneryielderApp>
           </ApolloProvider>
         </ToastContext.Provider>
       </Web3ReactProvider>
@@ -85,4 +85,4 @@ function UnrealApp({ Component, pageProps }: AppProps) {
   );
 }
 
-export default UnrealApp;
+export default yielderApp;

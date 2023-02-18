@@ -223,9 +223,9 @@ export default function DepositCardStack() {
         <Box
           sx={{
             height: '900px',
-            '& .unreal-app-theme--table-card': {
+            '& .yielder-app-theme--table-card': {
               marginBottom: theme.typography.pxToRem(2),
-              bgcolor: theme.unreal.card.backgroundColor,
+              bgcolor: theme.yielder.card.backgroundColor,
               boxShadow: '0px 10px 100px rgba(0, 0, 0, 0.06)',
               border: 0,
               borderRadius: theme.typography.pxToRem(8),
@@ -261,7 +261,7 @@ export default function DepositCardStack() {
             columns={getDepositDatagridColumns(theme)}
             rows={getRows()}
             onRowClick={handleRowClick}
-            getRowClassName={(_params) => `unreal-app-theme--table-card`}
+            getRowClassName={(_params) => `yielder-app-theme--table-card`}
             hideFooter
             rowHeight={depositDatagridRowHeight}
             getRowSpacing={(params: GridRowSpacingParams): GridRowSpacing => ({ top: 0, bottom: 20 })}

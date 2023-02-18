@@ -49,7 +49,7 @@ export const showMetamaskInstallationToast = (setToastData: ToastContextInterfac
           primaryButtonType: 'ANCHOR',
           primaryButtonText: 'TAKE ME THERE',
           linkType: 'EXTERNAL',
-          link: 'https://metamask.app.link/dapp/unreal.finance/'
+          link: 'https://metamask.app.link/dapp/yielder.finance/'
         }
       } as ToastDataInterface;
     });

@@ -354,7 +354,7 @@ export default function DepositCardModal({
       onClose={hideDialog}
       sx={{
         '& .MuiDialog-paper': {
-          background: theme.unreal.modal.backgroundColor,
+          background: theme.yielder.modal.backgroundColor,
           borderRadius: theme.typography.pxToRem(16)
         }
       }}
@@ -457,7 +457,7 @@ export default function DepositCardModal({
       </DialogContent>
       <DialogActions
         sx={{
-          backgroundColor: theme.unreal.modal.buttonContainerBackgroundColor,
+          backgroundColor: theme.yielder.modal.buttonContainerBackgroundColor,
           height: theme.typography.pxToRem(100),
           padding: `${theme.spacing(4)} ${theme.spacing(6)}`,
           justifyContent: 'space-between'

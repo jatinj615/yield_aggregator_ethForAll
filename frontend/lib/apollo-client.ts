@@ -8,7 +8,7 @@ let apolloClient: ApolloClient<NormalizedCacheObject>;
 
 function createApolloClient() {
   const ourServer = new HttpLink({
-    uri: process.env.NEXT_PUBLIC_UNREAL_SUBGRAPH_URL,
+    uri: process.env.NEXT_PUBLIC_yielder_SUBGRAPH_URL,
     credentials: 'same-origin'
   });
   const balancerserver = new HttpLink({

@@ -10,7 +10,7 @@ import {
   Price,
   Stream,
   Term,
-  UnrealTVL,
+  yielderTVL,
   VaultAPY
 } from 'utils/datagrid/columns/DepositColumns';
 
@@ -20,7 +20,7 @@ export const depositColumns = {
   stream: {
     minWidth: 250
   },
-  unrealTVL: {
+  yielderTVL: {
     minWidth: 150
   },
   vaultAPY: {
@@ -61,10 +61,10 @@ export const getDepositDatagridColumns = (theme: Theme): GridColumns => {
     {
       field: 'tvl',
       headerName: 'Total Liquidity',
-      minWidth: depositColumns.unrealTVL.minWidth,
+      minWidth: depositColumns.yielderTVL.minWidth,
       flex: 1,
       renderCell: (params: GridRenderCellParams<ethers.BigNumber>) => {
-        return <UnrealTVL params={params} />;
+        return <yielderTVL params={params} />;
       },
       sortable: false,
       disableColumnMenu: true
