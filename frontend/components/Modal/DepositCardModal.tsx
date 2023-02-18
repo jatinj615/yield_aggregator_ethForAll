@@ -118,7 +118,6 @@ export default function DepositCardModal({
     library
   } = useWeb3React<Web3Provider>();
   const network = useNetwork(library);
-  console.log(network)
   const connectedChainId = library.network.chainId
   underlying = ConnextWeth[connectedChainId]
   const erc20 = useERC20();

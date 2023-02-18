@@ -43,7 +43,6 @@ const useRegistry = () => {
         try {
             const registryFactory = new Registry__factory(signer);
             const registry = registryFactory.attach(registries[chainId]);
-            console.log(registry);
             return registry;
         } catch (err) {
             console.log(err);
@@ -86,7 +85,6 @@ const useRegistry = () => {
                 receiverAddress: await signer.getAddress(),
                 bridgeRequest: bridgeRequest
             }
-            console.log(payload);
             const registryContract = getRegistryContract();
             let tx;
             if(destinationChainId != chainId) {
