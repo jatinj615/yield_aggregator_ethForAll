@@ -16,6 +16,7 @@ import { Registry } from './contracts/RegistryType';
 import { isUndefined, toString } from 'lodash-es';
 import { ExplorerDataType, getExplorerLink } from 'utils';
 import { Registry__factory } from './contracts/Registry__factory';
+import { getConnextData } from '../utils/getConnextData';
 
 
 const useRegistry = () => {
@@ -37,15 +38,23 @@ const useRegistry = () => {
 
     const userDepositRequest = async (
         destinationChainId: number,
-        slippage: BigNumber,
         underlying: string,
         amount: BigNumber,
         vaultAddress: string,
         routeId: BigNumber,
     ) => {
         try {
-            const relayerFee = ethers.BigNumber.from("32901718860961600");
-            
+
+            let relayerFee: BigNumber = ethers.BigNumber.from('0');
+            let slippage: BigNumber = ethers.BigNumber.from('0');
+            // TODO: add relayer fee API
+            if(destinationChainId != chainId) {
+                const connextSDKResponse = await getConnextData(chainId, destinationChainId, amount.toString());
+                console.log((connextSDKResponse));
+                relayerFee = ethers.BigNumber.from(String(connextSDKResponse.relayerFee));
+                slippage = ethers.BigNumber.from(String(connextSDKResponse.destinationSlippage));
+                slippage = ethers.BigNumber.from("300");
+            }
             const bridgeRequest: Registry.BridgeRequestStruct = {
                 destinationDomain: connextDomain[destinationChainId],
                 relayerFee: relayerFee,
@@ -70,7 +79,6 @@ const useRegistry = () => {
             }
 
             const { hash } = tx;
-            console.log(tx);
             // * toast message
             let id = uuidv4();
 
