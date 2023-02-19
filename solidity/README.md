@@ -1,13 +1,32 @@
-# Sample Hardhat Project
+# Bob the Yielder Smart Contracts
 
-This project demonstrates a basic Hardhat use case. It comes with a sample contract, a test for that contract, and a script that deploys that contract.
+## Pre Requisites
+- <link>`nodeV16`</link>
 
-Try running some of the following tasks:
+## Setup
+1. Install dependencies
+   ```
+   npm install
+   ```
 
-```shell
-npx hardhat help
-npx hardhat test
-REPORT_GAS=true npx hardhat test
-npx hardhat node
-npx hardhat run scripts/deploy.ts
-```
+2. Setup Environment Variables. Create a `.env` file. Sample provided in `.env.example`
+   ```
+    MNEMONIC=<YOUR_KEY>
+    POLYGON_SCAN_API_KEY=<YOUR_KEY>
+    ETHERSCAN_API_KEY=<YOUR_KEY>
+    OPTIMISM_SCAN_API_KEY=<YOUR_KEY>
+    ARBITRUM_SCAN_API_KEY=<YOUR_KEY>
+    ALCHEMY_API_KEY=<YOUR_KEY>
+   ```
+
+3. Compile the contracts
+   ```
+   npx hardhat compile
+   ```
+
+4. Deployment scripts
+   ```
+   npx hardhat run <PATH_TO_SCRIPT> --network <NETWORK_NAME>
+   ```
+   `NETWORK_NAME` options - `goerli`, `optimistic_goerli`, `polygon_mumbai`, `arbitrum_goerli`.
+
