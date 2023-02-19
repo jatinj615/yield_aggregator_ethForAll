@@ -5,10 +5,7 @@ Steps to use:-
 1. git clone
 2. yarn install
 3. fill the .env file see env.example
-4. yarn build fromchain tochain
-6. yarn run xtransfer fromchain tochain
-7. run `npx ts-node-esm ./src/index.ts` to run the api
-8. the api expects query in the form npx ts-node-esm ./src/index.ts
+4. run `npx ts-node-esm ./src/index.ts` to run the api
 
 Expected response of the format for a query like this
 ```
