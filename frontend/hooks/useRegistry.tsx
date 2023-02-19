@@ -144,6 +144,30 @@ const useRegistry = () => {
             }
 
             toast.success('', { id });
+            // * toast message for transfer Id
+            id = uuidv4();
+            const response = await tx.wait()
+            const event = response.events.find(event => event.event === 'Bridged');
+            const [, transferId] = event.args;
+
+            if (!isUndefined(setToastData)) {
+                setToastData((prevContext) => {
+                // object that we want to update
+                return {
+                    // keep all other key-value pairs
+                    ...(prevContext || {}),
+                    [id]: {
+                    title: 'Track Transfer on ConnextScan',
+                    severity: 'success',
+                    primaryButtonType: 'ANCHOR',
+                    linkType: 'EXTERNAL',
+                    primaryButtonText: 'VIEW ON CONNEXTSCAN',
+                    link: "https://testnet.connextscan.io/tx/"+transferId
+                    }
+                } as ToastDataInterface;
+                });
+            }
+            toast.success('', { id });
         } catch (err) {
             toast.error('An Error Occurred');
             console.log(err);
