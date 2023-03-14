@@ -41,6 +41,17 @@ contract AaveWETHTestnetRoute is RouteBase {
         IPool(_vaultAddress).supply(address(weth), _amount, _receiver, 0);
     }
 
+
+    function borrow(
+        uint256 _amount,
+        uint256 _interestRateMode,
+        address _asset,
+        address _onBehalfOf,
+        address _vaultAddress
+    ) external override onlyRegistry {
+        IPool(_vaultAddress).borrow(_asset, _amount, _interestRateMode, 0, _onBehalfOf);
+    }
+
     function getYieldBearingToken(
         address _underlying, 
         address _vaultAddress
