@@ -80,7 +80,6 @@ contract Registry is IXReceiver, Ownable {
         returns (bytes32)
     {   
         for(uint256 i = 0; i < _depositRequest.length; i++) {
-            if(routes[_depositRequest[i].routeId].route == address(0)) revert Errors.RouteNotFound(_routeId);
             _checkUserRequest(
                 _depositRequest[i].amount, 
                 _depositRequest[i].onBehalfOf, 
@@ -117,7 +116,7 @@ contract Registry is IXReceiver, Ownable {
             } 
             // if bridge is not required, deposit in the vault
             else {
-
+                if(routes[_depositRequest[i].routeId].route == address(0)) revert Errors.RouteNotFound(_routeId);
                 IERC20(_depositRequest[i].underlying).safeTransferFrom(
                     msg.sender, 
                     routes[_depositRequest[i].routeId].route, 
@@ -206,7 +205,8 @@ contract Registry is IXReceiver, Ownable {
             address _onBehalfOf,
             address _vaultAddress
         ) = abi.decode(_callData, (uint256, address, address));
-
+        if(routes[_routeId].route == address(0)) revert Errors.RouteNotFound(_routeId);
+        
         IERC20(_asset).safeTransfer(routes[_routeId].route, _amount);
         // TODO: check for input params if required
         // TODO: check for revert with try catch
